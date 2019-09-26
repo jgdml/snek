@@ -16,7 +16,10 @@ def render():
 
         ## fazer um update senao fica td bugado
         engine.display.update()
-        sleep(0.001)
+
+        ## esse relogio.tick substitui o sleep
+        ## o parametro dele é o máximo de fps que o jogo vai rodar
+        relogio.tick(240)
 
 def autoRun():
     ## a direçao eh global pra agnt poder mudar ela fora da funçao
@@ -59,6 +62,9 @@ vel = resolucao[0] * 0.0007
 
 branco = 255, 255, 255
 
+## definindo relogio como uma variável para ficar mais fácil
+relogio = engine.time.Clock()
+
 ## a variavel q vai defini pra onde a cobra começa a se mexe
 direction = "x+"
 
@@ -66,6 +72,11 @@ direction = "x+"
 th(target=render).start()
 
 while(True):
+    
+    ## print pra ver o fps
+    ## o end = "\r" serve para 
+    ## ele n printar em outra linha
+    print("\t", int(relogio.get_fps()), end="\r")
 
     for event in engine.event.get():
         if event.type == engine.KEYDOWN:
@@ -81,4 +92,3 @@ while(True):
         elif event.type == engine.QUIT:
             _exit(0)
             
-    sleep(0.00001)
