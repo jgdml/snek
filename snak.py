@@ -5,14 +5,21 @@ from os import _exit
 
 def render():
     while(True):
+        ## pintar a tela de preto
         tela.fill(0)
+
+        ## desenhar a cobra
         engine.draw.rect(tela, branco, rectCobra)
+
+        ## fazer a cobra andar um pouco a cada frame
         autoRun()
 
+        ## fazer um update senao fica td bugado
         engine.display.update()
         sleep(0.001)
 
 def autoRun():
+    ## a direçao eh global pra agnt poder mudar ela fora da funçao
     global direction
 
     if direction == "x+":
@@ -27,23 +34,35 @@ def autoRun():
     elif direction == "y-":
         rectCobra[1] -= vel
 
-
+## inicia tudo do pygame
 engine.init()   
 
+## pega informaçao do display
 getRes = engine.display.Info()
+
+## guarda a res do display numa array
 resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
+
+##inicia a tela com a resolucao
 tela = engine.display.set_mode(resolucao)
 
+## define o tamanho da cobra de acordo com o display
+## nesse caso o tamanho eh 2% do tamanho do display
 tam = [int(resolucao[0] * 0.02)] * 2
 
+## [0, 1] sao as posiçoes da cobra e [2, 3] eh o tamanho
 rectCobra = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
 
+## calcula a velocidade da cobra com base na resoluçao da tela
+## vel eh 0,7% da resoluçao
 vel = resolucao[0] * 0.0007
 
 branco = 255, 255, 255
 
+## a variavel q vai defini pra onde a cobra começa a se mexe
 direction = "x+"
 
+## iniciando a funçao render numa thread separada pra ficar menos marofa
 th(target=render).start()
 
 while(True):
