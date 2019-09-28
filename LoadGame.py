@@ -58,6 +58,8 @@ def colisaoComida(obj1, obj2):
 def colisaoParede(rect):
     global rectPlayer
 
+    ## esses ifs sao para teleportar o player
+    ## quando ele toca a parede
     if rectPlayer[0] > resolucao[0] + 1:
         rectPlayer[0] = 2
     
@@ -70,34 +72,66 @@ def colisaoParede(rect):
     if rectPlayer[1] < 1:
         rectPlayer[1] = resolucao[1]
 
+    ## esses sao para finalizar o jogo quando
+    ## o player toca a parede
     # if rect[0] > resolucao[0] or rect[0] < 1:
     #     _exit(0)
 
     # if rect[1] > resolucao[1] or rect[1] < 1:
     #     _exit(0)
 
+def bot():
+    global direcao
+    
+    if rectPlayer[0] > posComida[0]:
+        direcao = "x-"
+
+        if rectPlayer[1] > posComida[1]:
+            direcao = "y-"
+
+    else:
+        direcao = "x+"
+        
+        if rectPlayer[1] < posComida[1]:
+            direcao = "y+"
+            
 
 def render():
+
     global calda
-    arr = [rectPlayer] * refreshRate
+    arr = [rectPlayer] * delayCalda
     calda = [0] * 2
+    
     while(True):
         ## pintar a tela de preto
         tela.fill(0)
 
-        ## desenhar a cobra
+
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
         for i in range(0, len(calda)):
-            engine.draw.rect(tela, playerCor, arr[len(arr) - 2 * (i +1)])
+            engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i +1)])
 
-        comida = engine.draw.rect(tela, playerCor, posComida)
+        ## desenhar a cobra denovo 
+        ## pra ficar em cima da calda
+        player = engine.draw.rect(tela, playerCor, rectPlayer)
+        
+        ## desenhar comida
+        comida = engine.draw.rect(tela, comidaCor, posComida)
 
         ## fazer a cobra andar um pouco a cada frame
         autoRun()
 
+        ## chama essa funcao a cada frame
+        ## pro bot analisar e decidir oq fazer
+        # bot()
+
+        ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
+
+        ## checa se algo colidiu com a parede
+        ## nesse caso o player
         colisaoParede(player)
 
         ## fazer um update senao fica td bugado
@@ -105,7 +139,7 @@ def render():
 
         ## esse relogio.tick substitui o sleep
         ## o parametro dele é o máximo de fps que o jogo vai rodar
-        relogio.tick(240)
+        relogio.tick_busy_loop(250)
 
 ## inicia tudo do pygame
 engine.init()   
@@ -130,14 +164,17 @@ tamComida = tam
 ## [0, 1] sao as posiçoes da cobra e [2, 3] eh o tamanho
 rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
 
-## calcula a velocidade da cobra com base na resoluçao da tela
-## vel eh 0,7% da resoluçao
-vel = resolucao[0]
+## calcula a velocidade da cobra com base no tamanho do player
+## vel eh 20% do tamanho
+vel = tam[0] * 0.2
 
-refreshRate = int((vel * 1000) / 2)
+# o delay q a calda vai ter 
+# para pegar a posicao do player
+delayCalda = 1
 
-playerCor = 255, 255, 255
-
+playerCor = 50, 255, 50
+caldaCor = 255, 255, 255
+comidaCor = 255, 100, 100
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "x+"
 
