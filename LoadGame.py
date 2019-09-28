@@ -56,16 +56,30 @@ def colisaoComida(obj1, obj2):
     
 
 def colisaoParede(rect):
-    if rect[0] > resolucao[0] or rect[0] < 1:
-        _exit(0)
+    global rectPlayer
 
-    if rect[1] > resolucao[1] or rect[0] < 1:
-        _exit(0)
+    if rectPlayer[0] > resolucao[0] + 1:
+        rectPlayer[0] = 2
+    
+    if rectPlayer[0] < 1:
+        rectPlayer[0] = resolucao[0]
+
+    if rectPlayer[1] > resolucao[1] + 1:
+        rectPlayer[1] = 2
+    
+    if rectPlayer[1] < 1:
+        rectPlayer[1] = resolucao[1]
+
+    # if rect[0] > resolucao[0] or rect[0] < 1:
+    #     _exit(0)
+
+    # if rect[1] > resolucao[1] or rect[1] < 1:
+    #     _exit(0)
 
 
 def render():
     global calda
-    arr = [rectPlayer] * 12
+    arr = [rectPlayer] * refreshRate
     calda = [0] * 2
     while(True):
         ## pintar a tela de preto
@@ -76,12 +90,13 @@ def render():
         arr.append(player)
 
         for i in range(0, len(calda)):
-            engine.draw.rect(tela, playerCor, arr[len(arr) - 11 * (i +1)])
+            engine.draw.rect(tela, playerCor, arr[len(arr) - 2 * (i +1)])
 
         comida = engine.draw.rect(tela, playerCor, posComida)
 
         ## fazer a cobra andar um pouco a cada frame
         autoRun()
+
         colisaoComida(player, comida)
         colisaoParede(player)
 
@@ -117,7 +132,9 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 
 ## calcula a velocidade da cobra com base na resoluçao da tela
 ## vel eh 0,7% da resoluçao
-vel = resolucao[0] * 0.0012
+vel = resolucao[0]
+
+refreshRate = int((vel * 1000) / 2)
 
 playerCor = 255, 255, 255
 
