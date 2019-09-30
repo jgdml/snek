@@ -20,22 +20,18 @@ def autoRun():
         rectPlayer[1] -= vel
 
 
-def aumentar():
-    global calda
-    calda.append(0)
-
-
 def novaComida():
     global posComida
     posComida = [randint(tamComida[0], resolucao[0] - tamComida[0]), randint(tamComida[1], resolucao[1] - tamComida[1]), tamComida[0], tamComida[1]]
 
 
 def colisaoComida(obj1, obj2):
-    global vel
+    global vel, calda
+
     if obj1.colliderect(obj2):
-        aumentar()
-        novaComida()
+        calda += 1
         vel += tam[0] * 0.02
+        novaComida()
 
 
 def paredeTeleporte():
@@ -142,17 +138,17 @@ def render():
 
     def gameover():
         ## tela de gameover
-        player = engine.draw.rect(tela, playerCor, rectPlayer)
-        comida = engine.draw.rect(tela, comidaCor, posComida)
+        player = engine.draw.rect(tela, verde, rectPlayer)
+        comida = engine.draw.rect(tela, vermelho, posComida)
         tela.blit(score, posScore)
         tela.blit(restart, posRestart)
         engine.display.update()
 
     def drawCalda():
-        for i in range(0, len(calda)):
+        for i in range(0, calda):
 
             ## desenhar cada parte da calda
-            c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
+            c = engine.draw.rect(tela, branco, arr[len(arr) - delayCalda * (i + 1)])
 
             ## checar se o player colidiu com a calda
             if player.colliderect(c) and i > 10:
@@ -160,22 +156,32 @@ def render():
 
             ## deletar elementos da array
             ## para ela nao ficar muito grande
-            if len(arr) > len(calda):
+            if len(arr) > calda:
                 arr.pop(0)
 
-
+    ## array que vai ter as posições
+    ## passadas do player
     arr = [rectPlayer] * tamInicial
-    calda = [0] * tamInicial
+
+    ## tamanho da calda
+    calda = tamInicial
 
 
     while(True):
         ## pintar a tela de preto
         tela.fill(0)
 
-        player = engine.draw.rect(tela, playerCor, rectPlayer)
+        ## desenhar player
+        player = engine.draw.rect(tela, verde, rectPlayer)
+
+        ## colocar a posiçao da cobra 
+        ## em um array para usar para
+        ## desenhar a calda
         arr.append(player)
 
-
+        ## se uma dessas funçoes retornar true
+        ## significa que o player encostou na calda
+        ## ou colidiu ocm a parede
         if drawCalda() or colisaoParede(player):
             fim = True
             gameover()
@@ -185,19 +191,19 @@ def render():
                 if reset:
                     resetAll()
                     arr = [rectPlayer] * tamInicial
-                    calda = [0] * tamInicial
+                    calda = tamInicial
                     break
 
 
         ## desenhar a cobra denovo
         ## pra ficar em cima da calda
-        player = engine.draw.rect(tela, playerCor, rectPlayer)
+        player = engine.draw.rect(tela, verde, rectPlayer)
 
         ## desenhar comida
-        comida = engine.draw.rect(tela, comidaCor, posComida)
+        comida = engine.draw.rect(tela, vermelho, posComida)
 
         ## dando update no score
-        score = fonte.render(str((len(calda) - tamInicial) * 500), True, caldaCor)
+        score = fonte.render(str((calda - tamInicial) * 500), True, branco)
 
         ## update na posiçao do score
         posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
@@ -215,9 +221,6 @@ def render():
 
         ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
-
-        ## checa se algo colidiu com a parede
-        ## nesse caso o player
 
         ## fazer um update senao fica td bugado
         engine.display.update()
@@ -265,9 +268,10 @@ vel = tam[0] * 0.15
 delayCalda = 1
 tamInicial = 10
 
-playerCor = 50, 255, 50
-caldaCor = 255, 255, 255
-comidaCor = 255, 100, 100
+verde = 50, 255, 50
+branco = 255, 255, 255
+vermelho = 255, 100, 100
+
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
 
@@ -275,12 +279,10 @@ direcao = "nulo"
 fonte = engine.font.SysFont("monospace_bold", int(resolucao[0] * 0.04))
 
 ## fazer um texto predefinido para renderizar depois
-restart = fonte.render("R = Reset", True, caldaCor)
+restart = fonte.render("R = Reset", True, branco)
 
 ## posição do texto de restart
 posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
-
-novaComida()
 
 ## pra resetar o jogo se o usuario
 ## apertar R
@@ -288,3 +290,5 @@ reset = False
 
 ## pra informar que o jogo acabou
 fim = False
+
+novaComida()
