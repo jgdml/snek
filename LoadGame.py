@@ -39,13 +39,13 @@ def paredeTeleporte():
     ## esses ifs sao para teleportar o player
     ## quando ele toca a parede
     if rectPlayer[0] > resolucao[0] + 1:
-        rectPlayer[0] = 2
+        rectPlayer[0] = 1
 
     if rectPlayer[0] < 1:
         rectPlayer[0] = resolucao[0]
 
     if rectPlayer[1] > resolucao[1] + 1:
-        rectPlayer[1] = 2
+        rectPlayer[1] = 1
 
     if rectPlayer[1] < 1:
         rectPlayer[1] = resolucao[1]
@@ -70,10 +70,10 @@ def paredeMorte(rect):
 def colisaoParede(rect):
 
     ## morrer quando tocar a parede
-    return paredeMorte(rect)
+    # return paredeMorte(rect)
 
     ## teleporte quando tocar a parede
-    # return paredeTeleporte()
+    return paredeTeleporte()
 
 
 def keyPress(tecla):
