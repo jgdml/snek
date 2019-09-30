@@ -148,13 +148,15 @@ def render():
         for i in range(0, len(calda)):
             c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
 
-            if player.colliderect(c) and i > 10:
-                return True
+            # if player.colliderect(c) and i > 10:
+            #     return True
 
+            if len(arr) > len(calda):
+                arr.pop(0)
 
     arr = [rectPlayer] * delayCalda
-    calda = [0] * 2
-    
+    calda = [0] * delayCalda
+
 
     while(True):
         ## pintar a tela de preto
