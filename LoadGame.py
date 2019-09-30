@@ -22,7 +22,7 @@ def autoRun():
 
 def keyPress(tecla):
     global reset
-    
+
     if tecla == engine.K_r and fim:
         reset = True
 
@@ -50,7 +50,7 @@ def movimentos(tecla):
             direcao = "y+"
 
 def aumentar():
-    global calda 
+    global calda
     calda.append(0)
 
 
@@ -63,7 +63,7 @@ def colisaoComida(obj1, obj2):
     if obj1.colliderect(obj2):
         aumentar()
         novaComida()
-    
+
 
 def paredeTeleporte():
     global rectPlayer
@@ -71,13 +71,13 @@ def paredeTeleporte():
     ## quando ele toca a parede
     if rectPlayer[0] > resolucao[0] + 1:
         rectPlayer[0] = 2
-    
+
     if rectPlayer[0] < 1:
         rectPlayer[0] = resolucao[0]
 
     if rectPlayer[1] > resolucao[1] + 1:
         rectPlayer[1] = 2
-    
+
     if rectPlayer[1] < 1:
         rectPlayer[1] = resolucao[1]
 
@@ -105,7 +105,7 @@ def colisaoParede(rect):
 
     ## teleporte quando tocar a parede
     # return paredeTeleporte()
-    
+
 def resetAll():
     global rectPlayer, fim, reset, direcao
 
@@ -118,7 +118,7 @@ def resetAll():
 
 def bot():
     global direcao
-    
+
     if rectPlayer[0] > posComida[0]:
         direcao = "x-"
 
@@ -127,22 +127,20 @@ def bot():
 
     else:
         direcao = "x+"
-        
+
         if rectPlayer[1] < posComida[1]:
             direcao = "y+"
-            
-            
-def gameover():
-    while(True):
-        tela.fill(0)
-
-        engine.display.update()
-
-        relogio.tick_busy_loop(limiteFps)
 
 
 def render():
     global calda, fim
+
+    def gameover():
+        player = engine.draw.rect(tela, playerCor, rectPlayer)
+        comida = engine.draw.rect(tela, comidaCor, posComida)
+        tela.blit(score, posScore)
+        tela.blit(restart, posRestart)
+        engine.display.update()
 
     def drawCalda():
         for i in range(0, len(calda)):
@@ -154,45 +152,39 @@ def render():
             if len(arr) > len(calda):
                 arr.pop(0)
 
+
     arr = [rectPlayer] * delayCalda
-    calda = [0] * delayCalda
+    calda = [0] * tamInicial
 
 
     while(True):
         ## pintar a tela de preto
         tela.fill(0)
 
-
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
-
         if drawCalda() or colisaoParede(player):
-            fim = True
-
-            player = engine.draw.rect(tela, playerCor, rectPlayer)
-            comida = engine.draw.rect(tela, comidaCor, posComida)
-            tela.blit(score, posScore)
-            tela.blit(restart, posRestart)
-            engine.display.update()
+            fim = True            
+            gameover()
 
             while(True):
-                
+
                 if reset:
                     resetAll()
                     arr = [rectPlayer] * delayCalda
-                    calda = [0] * delayCalda
+                    calda = [0] * tamInicial
                     break
-                
 
-        ## desenhar a cobra denovo 
+
+        ## desenhar a cobra denovo
         ## pra ficar em cima da calda
         player = engine.draw.rect(tela, playerCor, rectPlayer)
-        
+
         ## desenhar comida
         comida = engine.draw.rect(tela, comidaCor, posComida)
 
-        score = fonte.render(str((len(calda) - 1) * 500), True, caldaCor)
+        score = fonte.render(str((len(calda) - tamInicial) * 500), True, caldaCor)
         posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
 
         tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
@@ -221,7 +213,7 @@ def render():
     # gameover()
 
 ## inicia tudo do pygame
-engine.init()   
+engine.init()
 
 engine.display.set_caption("Snek")
 
@@ -251,7 +243,7 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 ## vel eh 20% do tamanho
 vel = tam[0] * 0.2
 
-# o delay q a calda vai ter 
+# o delay q a calda vai ter
 # para pegar a posicao do player
 delayCalda = 1
 
@@ -266,6 +258,8 @@ fonte = engine.font.SysFont("Arial", int(resolucao[0] * 0.04))
 restart = fonte.render("R = Reset", True, caldaCor)
 
 posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
+
+tamInicial = 2
 
 novaComida()
 
