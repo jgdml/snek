@@ -19,10 +19,13 @@ def autoRun():
     elif direcao == "y-":
         rectPlayer[1] -= vel
 
+
 def keyPress(tecla):
     global reset
+    
     if tecla == engine.K_r and fim:
         reset = True
+
     else:
         movimentos(tecla)
 
@@ -40,7 +43,7 @@ def movimentos(tecla):
 
     ## se ele nao estiver andando na vertical
     ## troque a posiçao vertical
-    else:
+    if direcao[0] != "y":
         if tecla == engine.K_UP:
             direcao = "y-"
         elif tecla == engine.K_DOWN:
@@ -104,10 +107,11 @@ def colisaoParede(rect):
     # return paredeTeleporte()
     
 def resetAll():
-    global rectPlayer, fim, reset
+    global rectPlayer, fim, reset, direcao
 
     fim = False
     reset = False
+    direcao = "nulo"
     rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
     novaComida()
 
@@ -126,6 +130,7 @@ def bot():
         
         if rectPlayer[1] < posComida[1]:
             direcao = "y+"
+            
             
 def gameover():
     while(True):
@@ -180,7 +185,7 @@ def render():
 
         ## chama essa funcao a cada frame
         ## pro bot analisar e decidir oq fazer
-        # bot()
+        bot()
 
         ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
@@ -234,7 +239,7 @@ playerCor = 50, 255, 50
 caldaCor = 255, 255, 255
 comidaCor = 255, 100, 100
 ## a variavel q vai definir pra onde a cobra vai se mexer
-direcao = "x+"
+direcao = "nulo"
 
 novaComida()
 
