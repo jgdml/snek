@@ -238,7 +238,7 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 
 ## calcula a velocidade da cobra com base no tamanho do player
 ## vel eh 20% do tamanho
-vel = tam[0] * 0.9
+vel = tam[0] * 0.2
 
 # o delay q a calda vai ter 
 # para pegar a posicao do player
