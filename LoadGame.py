@@ -148,8 +148,8 @@ def render():
         for i in range(0, len(calda)):
             c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
 
-            # if player.colliderect(c) and i > 10:
-            #     return True
+            if player.colliderect(c) and i > 10:
+                return True
 
             if len(arr) > len(calda):
                 arr.pop(0)
@@ -169,7 +169,15 @@ def render():
 
         if drawCalda() or colisaoParede(player):
             fim = True
+
+            player = engine.draw.rect(tela, playerCor, rectPlayer)
+            comida = engine.draw.rect(tela, comidaCor, posComida)
+            tela.blit(score, posScore)
+            tela.blit(restart, posRestart)
+            engine.display.update()
+
             while(True):
+                
                 if reset:
                     resetAll()
                     break
@@ -183,6 +191,7 @@ def render():
         comida = engine.draw.rect(tela, comidaCor, posComida)
 
         score = fonte.render(str((len(calda) - 1) * 500), True, caldaCor)
+        posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
 
         tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
 
@@ -192,7 +201,7 @@ def render():
 
         ## chama essa funcao a cada frame
         ## pro bot analisar e decidir oq fazer
-        bot()
+        # bot()
 
         ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
@@ -251,6 +260,10 @@ comidaCor = 255, 100, 100
 direcao = "nulo"
 
 fonte = engine.font.SysFont("Arial", int(resolucao[0] * 0.04))
+
+restart = fonte.render("R = Reset", True, caldaCor)
+
+posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
 
 novaComida()
 
