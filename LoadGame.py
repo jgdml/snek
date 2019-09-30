@@ -136,6 +136,7 @@ def render():
     global calda, fim
 
     def gameover():
+        ## tela de gameover
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         comida = engine.draw.rect(tela, comidaCor, posComida)
         tela.blit(score, posScore)
@@ -144,16 +145,21 @@ def render():
 
     def drawCalda():
         for i in range(0, len(calda)):
+
+            ## desenhar cada parte da calda
             c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
 
+            ## checar se o player colidiu com a calda
             if player.colliderect(c) and i > 10:
                 return True
 
+            ## deletar elementos da array
+            ## para ela nao ficar muito grande
             if len(arr) > len(calda):
                 arr.pop(0)
 
 
-    arr = [rectPlayer] * delayCalda
+    arr = [rectPlayer] * tamInicial
     calda = [0] * tamInicial
 
 
@@ -164,15 +170,16 @@ def render():
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
+
         if drawCalda() or colisaoParede(player):
-            fim = True            
+            fim = True
             gameover()
 
             while(True):
 
                 if reset:
                     resetAll()
-                    arr = [rectPlayer] * delayCalda
+                    arr = [rectPlayer] * tamInicial
                     calda = [0] * tamInicial
                     break
 
@@ -184,9 +191,13 @@ def render():
         ## desenhar comida
         comida = engine.draw.rect(tela, comidaCor, posComida)
 
+        ## dando update no score
         score = fonte.render(str((len(calda) - tamInicial) * 500), True, caldaCor)
+
+        ## update na posiçao do score
         posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
 
+        ## colocando score na tela
         tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
 
 
@@ -236,6 +247,7 @@ limiteFps = 200
 tam = [int(resolucao[0] * 0.02)] * 2
 
 tamComida = tam
+
 ## [0, 1] sao as posiçoes da cobra e [2, 3] eh o tamanho
 rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
 
@@ -246,6 +258,7 @@ vel = tam[0] * 0.2
 # o delay q a calda vai ter
 # para pegar a posicao do player
 delayCalda = 1
+tamInicial = 10
 
 playerCor = 50, 255, 50
 caldaCor = 255, 255, 255
@@ -253,13 +266,14 @@ comidaCor = 255, 100, 100
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
 
+## tipo de fonte e tamanho dela
 fonte = engine.font.SysFont("Arial", int(resolucao[0] * 0.04))
 
+## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, caldaCor)
 
+## posição do texto de restart
 posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
-
-tamInicial = 2
 
 novaComida()
 
