@@ -182,6 +182,11 @@ def render():
         ## desenhar comida
         comida = engine.draw.rect(tela, comidaCor, posComida)
 
+        score = fonte.render(str((len(calda) - 1) * 500), True, caldaCor)
+
+        tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
+
+
         ## fazer a cobra andar um pouco a cada frame
         autoRun()
 
@@ -207,6 +212,8 @@ def render():
 ## inicia tudo do pygame
 engine.init()   
 
+engine.display.set_caption("Snek")
+
 ## pega informaçao do display
 getRes = engine.display.Info()
 
@@ -231,7 +238,7 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 
 ## calcula a velocidade da cobra com base no tamanho do player
 ## vel eh 20% do tamanho
-vel = tam[0] * 0.2
+vel = tam[0] * 0.9
 
 # o delay q a calda vai ter 
 # para pegar a posicao do player
@@ -242,6 +249,8 @@ caldaCor = 255, 255, 255
 comidaCor = 255, 100, 100
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
+
+fonte = engine.font.SysFont("Arial", int(resolucao[0] * 0.04))
 
 novaComida()
 
