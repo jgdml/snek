@@ -20,35 +20,6 @@ def autoRun():
         rectPlayer[1] -= vel
 
 
-def keyPress(tecla):
-    global reset
-
-    if tecla == engine.K_r and fim:
-        reset = True
-
-    else:
-        movimentos(tecla)
-
-def movimentos(tecla):
-    global direcao
-
-    ## se ele nao estiver andando na horizontal
-    ## troque a posiçao horizontal
-
-    if direcao[0] != "x":
-        if tecla == engine.K_RIGHT:
-            direcao = "x+"
-        elif tecla == engine.K_LEFT:
-            direcao = "x-"
-
-    ## se ele nao estiver andando na vertical
-    ## troque a posiçao vertical
-    if direcao[0] != "y":
-        if tecla == engine.K_UP:
-            direcao = "y-"
-        elif tecla == engine.K_DOWN:
-            direcao = "y+"
-
 def aumentar():
     global calda
     calda.append(0)
@@ -60,9 +31,11 @@ def novaComida():
 
 
 def colisaoComida(obj1, obj2):
+    global vel
     if obj1.colliderect(obj2):
         aumentar()
         novaComida()
+        vel += tam[0] * 0.02
 
 
 def paredeTeleporte():
@@ -106,14 +79,36 @@ def colisaoParede(rect):
     ## teleporte quando tocar a parede
     # return paredeTeleporte()
 
-def resetAll():
-    global rectPlayer, fim, reset, direcao
 
-    fim = False
-    reset = False
-    direcao = "nulo"
-    rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
-    novaComida()
+def keyPress(tecla):
+    global reset
+
+    if tecla == engine.K_r and fim:
+        reset = True
+
+    else:
+        movimentos(tecla)
+
+
+def movimentos(tecla):
+    global direcao
+
+    ## se ele nao estiver andando na horizontal
+    ## troque a posiçao horizontal
+
+    if direcao[0] != "x":
+        if tecla == engine.K_RIGHT:
+            direcao = "x+"
+        elif tecla == engine.K_LEFT:
+            direcao = "x-"
+
+    ## se ele nao estiver andando na vertical
+    ## troque a posiçao vertical
+    if direcao[0] != "y":
+        if tecla == engine.K_UP:
+            direcao = "y-"
+        elif tecla == engine.K_DOWN:
+            direcao = "y+"
 
 
 def bot():
@@ -131,6 +126,16 @@ def bot():
         if rectPlayer[1] < posComida[1]:
             direcao = "y+"
 
+
+def resetAll():
+    global rectPlayer, fim, reset, direcao, vel
+
+    fim = False
+    reset = False
+    direcao = "nulo"
+    vel = tam[0] * 0.2
+    rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
+    novaComida()
 
 def render():
     global calda, fim
@@ -253,7 +258,7 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 
 ## calcula a velocidade da cobra com base no tamanho do player
 ## vel eh 20% do tamanho
-vel = tam[0] * 0.2
+vel = tam[0] * 0.15
 
 # o delay q a calda vai ter
 # para pegar a posicao do player
