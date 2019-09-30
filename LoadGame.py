@@ -55,31 +55,46 @@ def colisaoComida(obj1, obj2):
         aumentar()
         novaComida()
     
-
-def colisaoParede(rect):
+def paredeTeleporte():
     global rectPlayer
-
     ## esses ifs sao para teleportar o player
     ## quando ele toca a parede
-    # if rectPlayer[0] > resolucao[0] + 1:
-    #     rectPlayer[0] = 2
+    if rectPlayer[0] > resolucao[0] + 1:
+        rectPlayer[0] = 2
     
-    # if rectPlayer[0] < 1:
-    #     rectPlayer[0] = resolucao[0]
+    if rectPlayer[0] < 1:
+        rectPlayer[0] = resolucao[0]
 
-    # if rectPlayer[1] > resolucao[1] + 1:
-    #     rectPlayer[1] = 2
+    if rectPlayer[1] > resolucao[1] + 1:
+        rectPlayer[1] = 2
     
-    # if rectPlayer[1] < 1:
-    #     rectPlayer[1] = resolucao[1]
+    if rectPlayer[1] < 1:
+        rectPlayer[1] = resolucao[1]
+
+    return False
+
+def paredeMorte(rect):
+    val = False
 
     ## esses sao para finalizar o jogo quando
     ## o player toca a parede
     if rect[0] > resolucao[0] or rect[0] < 1:
-        _exit(0)
+        val = True
 
     if rect[1] > resolucao[1] or rect[1] < 1:
-        _exit(0)
+        val = True
+
+    return val
+
+
+def colisaoParede(rect):
+
+    ## morrer quando tocar a parede
+    # return paredeMorte(rect)
+
+    ## teleporte quando tocar a parede
+    return paredeTeleporte()
+    
 
 def bot():
     global direcao
@@ -115,7 +130,7 @@ def render():
             c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
 
             if player.colliderect(c) and i > 10:
-               return True 
+               return True
     
     while(True):
         ## pintar a tela de preto
@@ -125,7 +140,7 @@ def render():
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
-        if drawCalda():
+        if drawCalda() or colisaoParede(player):
             sleep(2)
             break
 
@@ -141,14 +156,13 @@ def render():
 
         ## chama essa funcao a cada frame
         ## pro bot analisar e decidir oq fazer
-        bot()
+        # bot()
 
         ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
 
         ## checa se algo colidiu com a parede
         ## nesse caso o player
-        colisaoParede(player)
 
         ## fazer um update senao fica td bugado
         engine.display.update()
