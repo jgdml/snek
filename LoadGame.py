@@ -272,7 +272,7 @@ comidaCor = 255, 100, 100
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.SysFont("Arial", int(resolucao[0] * 0.04))
+fonte = engine.font.SysFont("monospace_bold", int(resolucao[0] * 0.04))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, caldaCor)
