@@ -1,9 +1,8 @@
 import pygame as engine
+from os import _exit
 from time import sleep
 from threading import Thread as th
-from os import _exit
-from LoadGame import *
-
+from LoadGame import render, relogio, movimentos
 
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto

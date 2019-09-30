@@ -1,6 +1,7 @@
 import pygame as engine
 from os import _exit
 from random import randint
+from time import sleep
 
 def autoRun():
     ## a direçao eh global pra agnt poder mudar ela fora da funçao
@@ -60,25 +61,25 @@ def colisaoParede(rect):
 
     ## esses ifs sao para teleportar o player
     ## quando ele toca a parede
-    if rectPlayer[0] > resolucao[0] + 1:
-        rectPlayer[0] = 2
+    # if rectPlayer[0] > resolucao[0] + 1:
+    #     rectPlayer[0] = 2
     
-    if rectPlayer[0] < 1:
-        rectPlayer[0] = resolucao[0]
+    # if rectPlayer[0] < 1:
+    #     rectPlayer[0] = resolucao[0]
 
-    if rectPlayer[1] > resolucao[1] + 1:
-        rectPlayer[1] = 2
+    # if rectPlayer[1] > resolucao[1] + 1:
+    #     rectPlayer[1] = 2
     
-    if rectPlayer[1] < 1:
-        rectPlayer[1] = resolucao[1]
+    # if rectPlayer[1] < 1:
+    #     rectPlayer[1] = resolucao[1]
 
     ## esses sao para finalizar o jogo quando
     ## o player toca a parede
-    # if rect[0] > resolucao[0] or rect[0] < 1:
-    #     _exit(0)
+    if rect[0] > resolucao[0] or rect[0] < 1:
+        _exit(0)
 
-    # if rect[1] > resolucao[1] or rect[1] < 1:
-    #     _exit(0)
+    if rect[1] > resolucao[1] or rect[1] < 1:
+        _exit(0)
 
 def bot():
     global direcao
@@ -95,12 +96,26 @@ def bot():
         if rectPlayer[1] < posComida[1]:
             direcao = "y+"
             
+def gameover():
+    while(True):
+        tela.fill(0)
+
+        engine.display.update()
+
+        relogio.tick_busy_loop(limiteFps)
 
 def render():
 
     global calda
     arr = [rectPlayer] * delayCalda
     calda = [0] * 2
+    
+    def drawCalda():
+        for i in range(0, len(calda)):
+            c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
+
+            if player.colliderect(c) and i > 10:
+               return True 
     
     while(True):
         ## pintar a tela de preto
@@ -110,8 +125,9 @@ def render():
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
-        for i in range(0, len(calda)):
-            engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i +1)])
+        if drawCalda():
+            sleep(2)
+            break
 
         ## desenhar a cobra denovo 
         ## pra ficar em cima da calda
@@ -125,7 +141,7 @@ def render():
 
         ## chama essa funcao a cada frame
         ## pro bot analisar e decidir oq fazer
-        # bot()
+        bot()
 
         ## checa se o player colidiu com a comida
         colisaoComida(player, comida)
@@ -139,7 +155,9 @@ def render():
 
         ## esse relogio.tick substitui o sleep
         ## o parametro dele é o máximo de fps que o jogo vai rodar
-        relogio.tick_busy_loop(250)
+        relogio.tick_busy_loop(limiteFps)
+
+    gameover()
 
 ## inicia tudo do pygame
 engine.init()   
@@ -155,6 +173,8 @@ tela = engine.display.set_mode(resolucao)
 
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
+
+limiteFps = 250
 
 ## define o tamanho da cobra de acordo com o display
 ## nesse caso o tamanho eh 2% do tamanho do display
