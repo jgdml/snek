@@ -180,6 +180,8 @@ def render():
                 
                 if reset:
                     resetAll()
+                    arr = [rectPlayer] * delayCalda
+                    calda = [0] * delayCalda
                     break
                 
 
