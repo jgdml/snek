@@ -19,6 +19,12 @@ def autoRun():
     elif direcao == "y-":
         rectPlayer[1] -= vel
 
+def keyPress(tecla):
+    global reset
+    if tecla == engine.K_r and fim:
+        reset = True
+    else:
+        movimentos(tecla)
 
 def movimentos(tecla):
     global direcao
@@ -55,6 +61,7 @@ def colisaoComida(obj1, obj2):
         aumentar()
         novaComida()
     
+
 def paredeTeleporte():
     global rectPlayer
     ## esses ifs sao para teleportar o player
@@ -73,6 +80,7 @@ def paredeTeleporte():
 
     return False
 
+
 def paredeMorte(rect):
     val = False
 
@@ -90,11 +98,19 @@ def paredeMorte(rect):
 def colisaoParede(rect):
 
     ## morrer quando tocar a parede
-    # return paredeMorte(rect)
+    return paredeMorte(rect)
 
     ## teleporte quando tocar a parede
-    return paredeTeleporte()
+    # return paredeTeleporte()
     
+def resetAll():
+    global rectPlayer, fim, reset
+
+    fim = False
+    reset = False
+    rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
+    novaComida()
+
 
 def bot():
     global direcao
@@ -119,19 +135,22 @@ def gameover():
 
         relogio.tick_busy_loop(limiteFps)
 
-def render():
 
-    global calda
-    arr = [rectPlayer] * delayCalda
-    calda = [0] * 2
-    
+def render():
+    global calda, fim
+
     def drawCalda():
         for i in range(0, len(calda)):
             c = engine.draw.rect(tela, caldaCor, arr[len(arr) - delayCalda * (i + 1)])
 
             if player.colliderect(c) and i > 10:
-               return True
+                return True
+
+
+    arr = [rectPlayer] * delayCalda
+    calda = [0] * 2
     
+
     while(True):
         ## pintar a tela de preto
         tela.fill(0)
@@ -140,9 +159,14 @@ def render():
         player = engine.draw.rect(tela, playerCor, rectPlayer)
         arr.append(player)
 
+
         if drawCalda() or colisaoParede(player):
-            sleep(2)
-            break
+            fim = True
+            while(True):
+                if reset:
+                    resetAll()
+                    break
+                
 
         ## desenhar a cobra denovo 
         ## pra ficar em cima da calda
@@ -171,7 +195,7 @@ def render():
         ## o parametro dele é o máximo de fps que o jogo vai rodar
         relogio.tick_busy_loop(limiteFps)
 
-    gameover()
+    # gameover()
 
 ## inicia tudo do pygame
 engine.init()   
@@ -188,7 +212,7 @@ tela = engine.display.set_mode(resolucao)
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
 
-limiteFps = 250
+limiteFps = 200
 
 ## define o tamanho da cobra de acordo com o display
 ## nesse caso o tamanho eh 2% do tamanho do display
@@ -213,3 +237,10 @@ comidaCor = 255, 100, 100
 direcao = "x+"
 
 novaComida()
+
+## pra resetar o jogo se o usuario
+## apertar R
+reset = False
+
+## pra informar que o jogo acabou
+fim = False

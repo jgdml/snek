@@ -2,7 +2,7 @@ import pygame as engine
 from os import _exit
 from time import sleep
 from threading import Thread as th
-from LoadGame import render, relogio, movimentos
+from LoadGame import render, relogio, keyPress
 
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto
@@ -24,7 +24,7 @@ while(True):
             ## quando o evento é tecla pressionada
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
-            movimentos(event.key)
+            keyPress(event.key)
 
         ## se for sair ele fecha tudo
         elif event.type == engine.QUIT:
