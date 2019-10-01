@@ -1,10 +1,12 @@
 from os import _exit
 from time import sleep
 from threading import Thread as th
-from LoadGame import render, relogio, keyPress, engine, inicio
+from LoadGame import render, relogio, keyPress, engine, inicio, menu
 from User import login, cadastro, mostrarScores, mudarSkin
 
-inicio(lambda : login(), lambda: cadastro(), lambda: mostrarScores(), lambda : mudarSkin())
+inicio(lambda : login(), lambda: cadastro())
+
+menu(lambda: mostrarScores(), lambda : mudarSkin())
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto
 th(target=render).start()
@@ -25,7 +27,8 @@ while(True):
             ## quando o evento é tecla pressionada
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
-            keyPress(event.key)
+            if keyPress(event.key):
+                menu(lambda: mostrarScores(), lambda : mudarSkin())
 
         ## se for sair ele fecha tudo
         elif event.type == engine.QUIT:
