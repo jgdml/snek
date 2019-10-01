@@ -1,10 +1,10 @@
 from os import _exit
 from time import sleep
 from threading import Thread as th
-from LoadGame import render, relogio, keyPress, engine
+from LoadGame import render, relogio, keyPress, engine, inicio
 from User import cadastro, login
 
-cadastro()
+inicio(lambda : login(), lambda: cadastro())
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto
 th(target=render).start()

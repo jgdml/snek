@@ -32,10 +32,17 @@ CREATE TABLE IF NOT EXISTS skins (
 
 
 def cadastro():
+    msg = "Informe um login"
+
     while(True):
 
-        login = simpledialog.askstring(title = "", prompt="Informe um login")
-        senha = simpledialog.askstring(title = "", prompt="Informe uma senha", show="*")
+        login = simpledialog.askstring(title = "Login", prompt=msg)
+        if login == None:
+            return False
+        senha = simpledialog.askstring(title = "Senha", prompt="Digite uma senha", show="\u2022")
+
+        if senha == None:
+            return False
 
         checkLogin = f"""
         SELECT login FROM usuario
@@ -50,24 +57,33 @@ def cadastro():
         cursor.execute(checkLogin)
         resultado = cursor.fetchall()
 
-        if resultado == []:
-            print("===Cadastrado com sucesso")
+        if resultado == [] and login != "" and senha != "":
             cursor.execute(cadastrar)
             conn.commit()
             break
 
+        elif login == "" or senha == "":
+            msg = "Dados inválidos, digite um login"
+
         else:
-            print("===Este login já existe")
+            msg = "Este login ja existe, digite outro"
 
 
 def login():
+    msg = "Digite seu login"
+    msgSenha = "Digite sua senha"
+
     while(True):
-        login = input("Login: ")
-        senha = input("Senha: ")
-        print()
+        login = simpledialog.askstring(title = "Login", prompt=msg)
+        if login == None:
+            return False
+        senha = simpledialog.askstring(title = "Senha", prompt=msgSenha, show="\u2022")
+
+        if senha == None:
+            return False
 
         selectLogin = f"""
-        SELECT nome, senha, login FROM usuario
+        SELECT idUser, login, senha FROM usuario
         WHERE login == "{login}";
         """
 
@@ -76,17 +92,14 @@ def login():
 
         if resultado != []:
 
-            if senha == resultado[0][1]:
-
-                print("===Bem vindo", resultado[0][0])
-                loginOpcoes(resultado[0][0], resultado[0][2], resultado[0][1])
-                break
+            if senha == resultado[0][2]:
+                return resultado[0][2]
 
             else:
-                print("===Senha incorreta")
-
+                msgSenha = "Senha incorreta, tente novamente"
+    
         else:
-            print("===Este login não existe")
+            msg = "Este login não existe, digite outro"
 
 
 def loginOpcoes(nome, login, senha):

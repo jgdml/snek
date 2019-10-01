@@ -3,6 +3,47 @@ from os import _exit
 from random import randint
 from time import sleep
 
+def inicio(func1, func2):
+    def event():
+        for event in engine.event.get():
+            if event.type == engine.MOUSEBUTTONDOWN:
+                return True
+            
+            elif event.type == engine.QUIT:
+                _exit(0)
+
+    def boxMenu(texto, mousePos, click, posX, posY, func):
+
+        txtSize = fonte.size(texto)
+        txt = engine.font.Font.render(fonte, texto, True, branco)
+
+        rectTam = txtSize[0] + resolucao[0] * 0.2, txtSize[1] + resolucao[1] * 0.1
+
+        caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
+
+        caixa = engine.draw.rect(tela, branco, caixa, 1)
+
+        if caixa.collidepoint(mousePos):
+            if click:
+                return func()
+
+        tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] / 2))
+
+    
+    while(True):
+        tela.fill(0)
+        click = event()
+
+        if boxMenu("Login", engine.mouse.get_pos(), click, resolucao[0] / 2, resolucao[1] / 3, func1):
+            break
+
+        boxMenu("Cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, resolucao[1] / 2, func2)
+
+        engine.display.update()
+        
+        relogio.tick_busy_loop(60)
+
+
 def autoRun():
     ## a direçao eh global pra agnt poder mudar ela fora da funçao
     global direcao
