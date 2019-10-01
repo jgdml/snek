@@ -150,6 +150,7 @@ def keyPress(tecla):
     global reset
 
     if tecla == engine.K_r and fim:
+        uploadScore((calda - tamInicial) * 500)
         reset = True
 
     elif tecla == engine.K_ESCAPE and fim:
@@ -259,7 +260,6 @@ def render():
         if drawCalda() or colisaoParede(player):
             fim = True
             gameover()
-
 
             while(True):
 

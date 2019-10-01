@@ -1,6 +1,7 @@
 import sqlite3
 from tkinter.colorchooser import *
 from tkinter import Tk, simpledialog, colorchooser, messagebox
+from datetime import datetime
 
 root = Tk()
 root.withdraw()
@@ -155,9 +156,12 @@ def uploadScore(score):
     print(score)
     cursor.execute(f"""
     INSERT INTO highscores
-    VALUES (null, "{score}")
+    VALUES (null, "{score}", {datetime.now().strftime("%d%m%Y")}, "{iduser}")
     """)
     conn.commit()
+
+    cursor.execute("SELECT * FROM highscores")
+    print(cursor.fetchall())
 
 def mostrarScores():
     print("a")
