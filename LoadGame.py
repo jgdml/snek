@@ -62,6 +62,8 @@ def inicio(login, cadastro, high, skin):
 
         boxMenu("Skin", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[3], skin)
 
+        boxMenu("Sair", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
+
         engine.display.update()
         
         relogio.tick_busy_loop(60)

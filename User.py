@@ -89,6 +89,7 @@ def cadastro():
 
 
 def login():
+    global iduser
 
     while(True):
         login = simpledialog.askstring(title = "Login", prompt="Digite seu login")
@@ -110,6 +111,7 @@ def login():
         if resultado != []:
 
             if senha == resultado[0][2]:
+                iduser = resultado[0][0]
                 return True
 
             else:
@@ -130,15 +132,15 @@ def mudarSkin():
         cursor.execute(f"""
         UPDATE skin 
         SET vermelho = "{rgb[0]}", verde = "{rgb[1]}", azul = "{rgb[2]}"
+        WHERE idUser = {iduser}
         """)
         conn.commit()
     
 
 def getCor():
-    cursor.execute("""
+    cursor.execute(f"""
     SELECT vermelho, verde, azul FROM skin 
-    INNER JOIN usuario
-    ON usuario.idUser = skin.idUser;
+    WHERE idUser = {iduser};
     """)
 
     resultado = cursor.fetchall()
