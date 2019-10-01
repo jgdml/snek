@@ -35,7 +35,7 @@ def cadastro():
     while(True):
 
         login = simpledialog.askstring(title = "", prompt="Informe um login")
-        senha = simpledialog.askstring(title = "", prompt="Informe uma senha")
+        senha = simpledialog.askstring(title = "", prompt="Informe uma senha", show="*")
 
         checkLogin = f"""
         SELECT login FROM usuario
@@ -44,7 +44,7 @@ def cadastro():
 
         cadastrar = f"""
         INSERT INTO usuario 
-        VALUES ("{login}", "{senha}");
+        VALUES (null, "{login}", "{senha}");
         """
 
         cursor.execute(checkLogin)
