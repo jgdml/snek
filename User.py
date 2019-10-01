@@ -119,10 +119,11 @@ def mudarSkin():
         rgb = []
         for i in range(0, len(res[0])):
             rgb.append(int(res[0][i]))
-        print(rgb)
 
-        # cursor.execute("""
-        # UPDATE skins SET """)
+        cursor.execute(f"""
+        UPDATE skins SET vermelho = "{rgb[0]}", verde = "{rgb[1]}", azul = "{rgb[2]}" 
+        """)
+        conn.commit()
     
 
 def getCor():
