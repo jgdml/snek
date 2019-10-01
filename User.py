@@ -1,6 +1,6 @@
 import sqlite3
 from tkinter.colorchooser import *
-from tkinter import Tk, simpledialog
+from tkinter import Tk, simpledialog, colorchooser
 
 Tk().withdraw()
 
@@ -27,7 +27,9 @@ CREATE TABLE IF NOT EXISTS skins (
     idSkin INTEGER PRIMARY KEY,
     vermelho TEXT NOT NULL,
     verde TEXT NOT NULL,
-    azul TEXT NOT NULL
+    azul TEXT NOT NULL,
+    idUser INTEGER UNIQUE,
+    FOREIGN KEY (idUser) REFERENCES usuario(idUser)
 );""")
 
 
@@ -45,7 +47,7 @@ def cadastro():
             return False
 
         checkLogin = f"""
-        SELECT login FROM usuario
+        SELECT login, idUser FROM usuario
         WHERE login == "{login}";
         """
 
@@ -59,6 +61,14 @@ def cadastro():
 
         if resultado == [] and login != "" and senha != "":
             cursor.execute(cadastrar)
+            conn.commit()
+            cursor.execute(checkLogin)
+            res = cursor.fetchall()
+            iduser = res[0][1]
+            cursor.execute(f"""
+            INSERT INTO skins 
+            VALUES (null, "255", "255", "255", {iduser})
+            """)
             conn.commit()
             break
 
@@ -102,46 +112,32 @@ def login():
             msg = "Este login não existe, digite outro"
 
 
-def loginOpcoes(nome, login, senha):
-    print(nome, senha, login)
-    while(True):
-        print("\nMenu\n\n1 - Alterar Nome\n2 - Deletar conta\n3 - Deslogar\n")
+def mudarSkin():
+    res = colorchooser.askcolor()
 
-        opcao = int(input("Escolha uma opção: "))
+    if res[0] != None:
+        rgb = []
+        for i in range(0, len(res[0])):
+            rgb.append(int(res[0][i]))
+        print(rgb)
 
-        if opcao == 1:
-            nomeNovo = input("Digite seu novo nome: ")
-            script = f"""
-            UPDATE usuario SET nome = '{nomeNovo}'
-            WHERE login = '{login}';
-            """
-            cursor.execute(script)
-            print("Nome alterado para ", nomeNovo)
+        # cursor.execute("""
+        # UPDATE skins SET """)
+    
 
-        elif opcao == 2:
+def getCor():
+    cursor.execute("""
+    SELECT vermelho, verde, azul FROM skins 
+    INNER JOIN usuario
+    ON usuario.idUser = skins.idUser""")
 
-            confirmacao = input(
-                "Tem certeza que deseja excluir sua conta?\nDigite sua senha para continuar: ")
-            script = f"""
-            DELETE FROM usuario
-            WHERE login = '{login}'
-            """
-
-            if confirmacao == senha:
-                cursor.execute(script)
-                conn.commit()
-                print("\n===Conta Excluída")
-                break
-            else:
-                print("\n===Senha incorreta")
-
-        elif opcao == 3:
-            break
-
-        else:
-            print("Opção inválida")
+    resultado = cursor.fetchall()
+    rgb = []
+    for i in range (0, len(resultado[0])):
+        rgb.append(int(resultado[0][i]))
+    
+    return rgb
 
 
-
-def fechar():
-    conn.close()
+def mostrarScores():
+    print("a")

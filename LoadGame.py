@@ -2,8 +2,16 @@ import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
+from User import getCor
 
-def inicio(func1, func2):
+def inicio(login, cadastro, high, skin):
+    global corCobra
+
+    posCaixa = []
+    for i in range(1, 7):
+        posCaixa.append((resolucao[1] / 6) * i)
+    def nada():
+        return True
     def event():
         for event in engine.event.get():
             if event.type == engine.MOUSEBUTTONDOWN:
@@ -34,14 +42,32 @@ def inicio(func1, func2):
         tela.fill(0)
         click = event()
 
-        if boxMenu("Login", engine.mouse.get_pos(), click, resolucao[0] / 2, resolucao[1] / 3, func1):
+        if boxMenu("Login", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], login):
             break
 
-        boxMenu("Cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, resolucao[1] / 2, func2)
+        boxMenu("Cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[2], cadastro)
 
         engine.display.update()
         
         relogio.tick_busy_loop(60)
+    
+    while(True):
+        tela.fill(0)
+        click = event()
+
+        if boxMenu("Jogar", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], nada):
+            break
+
+        boxMenu("Highscores", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[2], high)
+
+        boxMenu("Skin", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[3], skin)
+
+        engine.display.update()
+        
+        relogio.tick_busy_loop(60)
+    
+    corCobra = getCor()
+
 
 
 def autoRun():
@@ -189,7 +215,7 @@ def render():
         for i in range(0, calda):
 
             ## desenhar cada parte da calda
-            c = engine.draw.rect(tela, branco, arr[len(arr) - delayCalda * (i + 1)])
+            c = engine.draw.rect(tela, corCobra, arr[len(arr) - delayCalda * (i + 1)])
 
             ## checar se o player colidiu com a calda
             if player.colliderect(c) and i > 10:
@@ -213,7 +239,7 @@ def render():
         tela.fill(0)
 
         ## desenhar player
-        player = engine.draw.rect(tela, verde, rectPlayer)
+        player = engine.draw.rect(tela, corCobra, rectPlayer)
 
         ## colocar a posiçao da cobra 
         ## em um array para usar para
@@ -238,7 +264,7 @@ def render():
 
         ## desenhar a cobra denovo
         ## pra ficar em cima da calda
-        player = engine.draw.rect(tela, verde, rectPlayer)
+        player = engine.draw.rect(tela, corCobra, rectPlayer)
 
         ## desenhar comida
         comida = engine.draw.rect(tela, vermelho, posComida)
@@ -309,7 +335,6 @@ vel = tam[0] * 0.15
 delayCalda = 1
 tamInicial = 10
 
-verde = 50, 255, 50
 branco = 255, 255, 255
 vermelho = 255, 100, 100
 
