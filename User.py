@@ -1,9 +1,9 @@
 import sqlite3
 from tkinter.colorchooser import *
-from tkinter import Tk, simpledialog, colorchooser
+from tkinter import Tk, simpledialog, colorchooser, messagebox
 
-Tk().withdraw()
-
+root = Tk()
+root.withdraw()
 
 conn = sqlite3.connect("BD")
 cursor = conn.cursor()
@@ -19,11 +19,13 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS highscores (
     idHigh INTEGER PRIMARY KEY,
     score INT NOT NULL,
-    data DATE NOT NULL
+    data DATE NOT NULL,
+    idUser INTEGER,
+    FOREIGN KEY (idUser) REFERENCES usuario(idUser)
 );""")
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS skins (
+CREATE TABLE IF NOT EXISTS skin (
     idSkin INTEGER PRIMARY KEY,
     vermelho TEXT NOT NULL,
     verde TEXT NOT NULL,
@@ -34,11 +36,10 @@ CREATE TABLE IF NOT EXISTS skins (
 
 
 def cadastro():
-    msg = "Informe um login"
 
     while(True):
 
-        login = simpledialog.askstring(title = "Login", prompt=msg)
+        login = simpledialog.askstring(title = "Login", prompt="Informe um login")
         if login == None:
             return False
         senha = simpledialog.askstring(title = "Senha", prompt="Digite uma senha", show="\u2022")
@@ -62,32 +63,38 @@ def cadastro():
         if resultado == [] and login != "" and senha != "":
             cursor.execute(cadastrar)
             conn.commit()
+
             cursor.execute(checkLogin)
             res = cursor.fetchall()
+
             iduser = res[0][1]
+
             cursor.execute(f"""
-            INSERT INTO skins 
+            INSERT INTO skin 
             VALUES (null, "255", "255", "255", {iduser})
             """)
             conn.commit()
+
+            messagebox.showinfo("Sucesso", f"{login} cadastrado com sucesso")
             break
 
-        elif login == "" or senha == "":
-            msg = "Dados inválidos, digite um login"
+        elif login == "":
+            messagebox.showerror("Erro", "Digite um login")
+
+        elif senha == "":
+            messagebox.showerror("Erro", "Digite uma senha")
 
         else:
-            msg = "Este login ja existe, digite outro"
+            messagebox.showerror("Erro", "Este login ja existe, digite outro")
 
 
 def login():
-    msg = "Digite seu login"
-    msgSenha = "Digite sua senha"
 
     while(True):
-        login = simpledialog.askstring(title = "Login", prompt=msg)
+        login = simpledialog.askstring(title = "Login", prompt="Digite seu login")
         if login == None:
             return False
-        senha = simpledialog.askstring(title = "Senha", prompt=msgSenha, show="\u2022")
+        senha = simpledialog.askstring(title = "Senha", prompt="Digite sua senha", show="\u2022")
 
         if senha == None:
             return False
@@ -103,13 +110,13 @@ def login():
         if resultado != []:
 
             if senha == resultado[0][2]:
-                return resultado[0][2]
+                return True
 
             else:
-                msgSenha = "Senha incorreta, tente novamente"
+                messagebox.showerror("Erro", "Senha incorreta, tente novamente")
     
         else:
-            msg = "Este login não existe, digite outro"
+            messagebox.showerror("Erro", "Este login não existe, digite outro")
 
 
 def mudarSkin():
@@ -121,24 +128,34 @@ def mudarSkin():
             rgb.append(int(res[0][i]))
 
         cursor.execute(f"""
-        UPDATE skins SET vermelho = "{rgb[0]}", verde = "{rgb[1]}", azul = "{rgb[2]}" 
+        UPDATE skin 
+        SET vermelho = "{rgb[0]}", verde = "{rgb[1]}", azul = "{rgb[2]}"
         """)
         conn.commit()
     
 
 def getCor():
     cursor.execute("""
-    SELECT vermelho, verde, azul FROM skins 
+    SELECT vermelho, verde, azul FROM skin 
     INNER JOIN usuario
-    ON usuario.idUser = skins.idUser""")
+    ON usuario.idUser = skin.idUser;
+    """)
 
     resultado = cursor.fetchall()
+
     rgb = []
     for i in range (0, len(resultado[0])):
         rgb.append(int(resultado[0][i]))
     
     return rgb
 
+def uploadScore(score):
+    print(score)
+    cursor.execute(f"""
+    INSERT INTO highscores
+    VALUES (null, "{score}")
+    """)
+    conn.commit()
 
 def mostrarScores():
     print("a")

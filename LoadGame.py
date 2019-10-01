@@ -2,7 +2,7 @@ import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
-from User import getCor
+from User import getCor, uploadScore
 
 def inicio(login, cadastro, high, skin):
     global corCobra
@@ -137,10 +137,10 @@ def paredeMorte(rect):
 def colisaoParede(rect):
 
     ## morrer quando tocar a parede
-    # return paredeMorte(rect)
+    return paredeMorte(rect)
 
     ## teleporte quando tocar a parede
-    return paredeTeleporte()
+    # return paredeTeleporte()
 
 
 def keyPress(tecla):
@@ -148,6 +148,9 @@ def keyPress(tecla):
 
     if tecla == engine.K_r and fim:
         reset = True
+
+    elif tecla == engine.K_ESCAPE and fim:
+        _exit(0)
 
     else:
         movimentos(tecla)
@@ -205,10 +208,11 @@ def render():
 
     def gameover():
         ## tela de gameover
-        player = engine.draw.rect(tela, verde, rectPlayer)
+        player = engine.draw.rect(tela, corCobra, rectPlayer)
         comida = engine.draw.rect(tela, vermelho, posComida)
         tela.blit(score, posScore)
         tela.blit(restart, posRestart)
+        tela.blit(sair, posSair)
         engine.display.update()
 
     def drawCalda():
@@ -253,6 +257,7 @@ def render():
             fim = True
             gameover()
 
+
             while(True):
 
                 if reset:
@@ -296,7 +301,6 @@ def render():
         ## o parametro dele é o máximo de fps que o jogo vai rodar
         relogio.tick_busy_loop(limiteFps)
 
-    # gameover()
 
 ## inicia tudo do pygame
 engine.init()
@@ -342,13 +346,19 @@ vermelho = 255, 100, 100
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.SysFont("monospace_bold", int(resolucao[0] * 0.04))
+fonte = engine.font.SysFont("monospace", int(resolucao[0] * 0.035))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)
 
 ## posição do texto de restart
 posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
+
+
+sair = fonte.render("ESC = Menu", True, branco)
+
+posSair = (resolucao[0] / 2 - sair.get_size()[0] / 2, posRestart[1] - sair.get_size()[1])
+
 
 ## pra resetar o jogo se o usuario
 ## apertar R
