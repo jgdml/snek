@@ -33,7 +33,7 @@ def boxMenu(texto, mousePos, click, posX, posY, func):
 def inicio(login, cadastro):
     
     while(True):
-        tela.fill(0)
+        tela.fill(bg)
         click = event()
 
         if boxMenu("Login", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], login):
@@ -54,7 +54,7 @@ def menu(high, skin):
         return True
 
     while(True):
-        tela.fill(0)
+        tela.fill(bg)
         click = event()
 
         if boxMenu("Jogar", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], nada):
@@ -244,7 +244,7 @@ def render():
 
     while(True):
         ## pintar a tela de preto
-        tela.fill(0)
+        tela.fill(bg)
 
         ## desenhar player
         player = engine.draw.rect(tela, corCobra, rectPlayer)
@@ -346,6 +346,7 @@ vel = tam[0] * 0.15
 delayCalda = 1
 tamInicial = 10
 
+bg = 10, 10, 10
 branco = 255, 255, 255
 vermelho = 255, 100, 100
 
