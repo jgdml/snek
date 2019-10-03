@@ -8,23 +8,26 @@ def event():
     for event in engine.event.get():
         if event.type == engine.MOUSEBUTTONDOWN:
             return True
+
+        elif event.type == engine.KEYDOWN:
+            return event.unicode
         
         elif event.type == engine.QUIT:
             _exit(0)
 
-def boxMenu(texto, mousePos, click, posX, posY, func):
+def boxMenu(texto, click, posX, posY, func):
 
     txtSize = fonte.size(texto)
     txt = engine.font.Font.render(fonte, texto, True, branco)
 
-    rectTam = txtSize[0] + resolucao[0] * 0.2, txtSize[1] + resolucao[1] * 0.1
+    rectTam = txtSize[0] + resolucao[0] * 0.1, txtSize[1] + resolucao[1] * 0.04
 
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
 
     caixa = engine.draw.rect(tela, branco, caixa, 1)
     
 
-    if caixa.collidepoint(mousePos):
+    if caixa.collidepoint(engine.mouse.get_pos()):
         caixa = engine.draw.rect(tela, branco, caixa)
         txt = engine.font.Font.render(fonte, texto, True, bg)
         if click:
@@ -44,6 +47,9 @@ def textInput(posX, posY, txt):
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
     caixa = engine.draw.rect(tela, branco, caixa, 1)
 
+    if caixa.collidepoint(engine.mouse.get_pos()):
+        caixa = engine.draw.rect(tela, branco, caixa)
+
 
 def inicio(login, cadastro):
     
@@ -57,7 +63,7 @@ def inicio(login, cadastro):
 
         textInput(resolucao[0] / 2, posCaixa[4], "Senha")
 
-        boxMenu("Não tenho cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[4], cadastro)
+        boxMenu("Não tenho cadastro", click, resolucao[0] / 2, posCaixa[5], cadastro)
 
         
 
@@ -77,14 +83,14 @@ def menu(high, skin):
         tela.fill(bg)
         click = event()
 
-        if boxMenu("Jogar", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], nada):
+        if boxMenu("Jogar", click, resolucao[0] / 2, posCaixa[1], nada):
             break
 
-        boxMenu("Highscores", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[2], high)
+        boxMenu("Highscores", click, resolucao[0] / 2, posCaixa[2], high)
 
-        boxMenu("Skin", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[3], skin)
+        boxMenu("Skin", click, resolucao[0] / 2, posCaixa[3], skin)
 
-        boxMenu("Sair", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
+        boxMenu("Sair", click, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
 
         engine.display.update()
         
@@ -340,8 +346,8 @@ resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
 tela = engine.display.set_mode(resolucao)
 
 posCaixa = []
-for i in range(1, 7):
-    posCaixa.append((resolucao[1] / 6) * i)
+for i in range(1, 8):
+    posCaixa.append((resolucao[1] / 7) * i)
 
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
