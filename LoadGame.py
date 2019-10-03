@@ -88,7 +88,8 @@ def inicio(login, cadastro):
                 break
 
         
-            boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra)
+            if boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra):
+                break
 
             engine.display.update()
             relogio.tick_busy_loop(limiteFps)
