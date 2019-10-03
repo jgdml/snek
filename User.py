@@ -156,12 +156,14 @@ def uploadScore(score):
     print(score)
     cursor.execute(f"""
     INSERT INTO highscores
-    VALUES (null, "{score}", {datetime.now().strftime("%d%m%Y")}, "{iduser}")
+    VALUES (null, "{score}", {datetime.now().strftime("%y%m%d")}, "{iduser}")
     """)
     conn.commit()
 
-    cursor.execute("SELECT * FROM highscores")
-    print(cursor.fetchall())
 
 def mostrarScores():
-    print("a")
+    cursor.execute(f"""
+    SELECT score, data FROM highscores 
+    ORDER BY score DESC
+    """)
+    
