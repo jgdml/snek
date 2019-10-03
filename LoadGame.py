@@ -22,12 +22,27 @@ def boxMenu(texto, mousePos, click, posX, posY, func):
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
 
     caixa = engine.draw.rect(tela, branco, caixa, 1)
+    
 
     if caixa.collidepoint(mousePos):
+        caixa = engine.draw.rect(tela, branco, caixa)
+        txt = engine.font.Font.render(fonte, texto, True, bg)
         if click:
             return func()
-
+    
     tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] / 2))
+
+
+
+def textInput(posX, posY, txt):
+    txt = engine.font.Font.render(fonte, txt, True, branco)
+    txtSize = txt.get_size()
+    rectTam = resolucao[0] * 0.4, resolucao[1] * 0.07
+
+    tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] * 2))
+
+    caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
+    caixa = engine.draw.rect(tela, branco, caixa, 1)
 
 
 def inicio(login, cadastro):
@@ -36,10 +51,15 @@ def inicio(login, cadastro):
         tela.fill(bg)
         click = event()
 
-        if boxMenu("Login", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[1], login):
-            break
 
-        boxMenu("Cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[2], cadastro)
+
+        textInput(resolucao[0] / 2, posCaixa[3], "Login")
+
+        textInput(resolucao[0] / 2, posCaixa[4], "Senha")
+
+        boxMenu("Não tenho cadastro", engine.mouse.get_pos(), click, resolucao[0] / 2, posCaixa[4], cadastro)
+
+        
 
         engine.display.update()
         
