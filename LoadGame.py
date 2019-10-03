@@ -6,16 +6,14 @@ from User import getCor, uploadScore
 
 def event():
     for event in engine.event.get():
-        if event.type == engine.MOUSEBUTTONDOWN:
-            return True
-
-        elif event.type == engine.KEYDOWN:
-            return event.unicode
         
-        elif event.type == engine.QUIT:
+        if event.type == engine.QUIT:
             _exit(0)
 
-def boxMenu(texto, click, posX, posY, func):
+        return event
+
+
+def boxMenu(texto, evento, posX, posY, func):
 
     txtSize = fonte.size(texto)
     txt = engine.font.Font.render(fonte, texto, True, branco)
@@ -30,16 +28,20 @@ def boxMenu(texto, click, posX, posY, func):
     if caixa.collidepoint(engine.mouse.get_pos()):
         caixa = engine.draw.rect(tela, branco, caixa)
         txt = engine.font.Font.render(fonte, texto, True, bg)
-        if click:
+        if evento != None and evento.type == engine.MOUSEBUTTONDOWN:
             return func()
     
     tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] / 2))
 
 
 
-def textInput(posX, posY, txt):
+def textInput(posX, posY, txt, evento, txtIn):
     txt = engine.font.Font.render(fonte, txt, True, branco)
     txtSize = txt.get_size()
+
+    txtInShow = engine.font.Font.render(fonte, txtIn, True, branco)
+    txtInSize = txtInShow.get_size()
+
     rectTam = resolucao[0] * 0.4, resolucao[1] * 0.07
 
     tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] * 2))
@@ -48,24 +50,33 @@ def textInput(posX, posY, txt):
     caixa = engine.draw.rect(tela, branco, caixa, 1)
 
     if caixa.collidepoint(engine.mouse.get_pos()):
+        txtInShow = engine.font.Font.render(fonte, txtIn, True, bg)
         caixa = engine.draw.rect(tela, branco, caixa)
+        
+        if evento != None and evento.type == engine.KEYDOWN:
+            return evento.unicode
+
+    tela.blit(txtInShow, (posX - txtInSize[0] / 2, posY - txtInSize[1] / 2))
+    
+    return ""
 
 
 def inicio(login, cadastro):
-    
+    loginTxt = ""
+    senhaTxt = ""
+
     while(True):
         tela.fill(bg)
-        click = event()
 
+        evento = event()
 
+        loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
 
-        textInput(resolucao[0] / 2, posCaixa[3], "Login")
+        senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
 
-        textInput(resolucao[0] / 2, posCaixa[4], "Senha")
+        boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], login)
 
-        boxMenu("Não tenho cadastro", click, resolucao[0] / 2, posCaixa[5], cadastro)
-
-        
+        boxMenu("Não tenho cadastro", evento, resolucao[0] * 0.23, resolucao[1] * 0.952, cadastro)
 
         engine.display.update()
         
@@ -76,21 +87,18 @@ def inicio(login, cadastro):
 def menu(high, skin):
     global corCobra
     
-    def nada():
-        return True
 
     while(True):
         tela.fill(bg)
-        click = event()
+        evento = event()
 
-        if boxMenu("Jogar", click, resolucao[0] / 2, posCaixa[1], nada):
-            break
+        boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[1], breakpoint)
 
-        boxMenu("Highscores", click, resolucao[0] / 2, posCaixa[2], high)
+        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[2], high)
 
-        boxMenu("Skin", click, resolucao[0] / 2, posCaixa[3], skin)
+        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[3], skin)
 
-        boxMenu("Sair", click, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
 
         engine.display.update()
         
