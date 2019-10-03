@@ -61,6 +61,8 @@ def textInput(posX, posY, txt, evento, txtIn):
     return ""
 
 def quebra():
+    global reset
+    reset = True
     return True
 
 def inicio(login, cadastro):
@@ -132,14 +134,14 @@ def menu(high, skin):
         tela.fill(bg)
         evento = event()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[1], lambda: quebra()):
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[2], lambda: quebra()):
             break
 
-        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[2], high)
+        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[3], high)
 
-        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[3], skin)
+        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[4], skin)
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[4], lambda: _exit(0))
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[5], lambda: _exit(0))
 
         engine.display.update()
         
@@ -229,7 +231,7 @@ def keyPress(tecla):
         reset = True
 
     elif tecla == engine.K_ESCAPE and fim:
-        _exit(0)
+        return True
 
     else:
         movimentos(tecla)
@@ -301,7 +303,7 @@ def render():
             c = engine.draw.rect(tela, corCobra, arr[len(arr) - delayCalda * (i + 1)])
 
             ## checar se o player colidiu com a calda
-            if player.colliderect(c) and i > 10:
+            if player.colliderect(c) and i > 9:
                 return True
 
             ## deletar elementos da array
