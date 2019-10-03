@@ -36,14 +36,12 @@ CREATE TABLE IF NOT EXISTS skin (
 );""")
 
 
-def cadastro():
+def cadastro(login, senha):
 
     while(True):
 
-        login = simpledialog.askstring(title = "Login", prompt="Informe um login")
         if login == None:
             return False
-        senha = simpledialog.askstring(title = "Senha", prompt="Digite uma senha", show="\u2022")
 
         if senha == None:
             return False
@@ -89,14 +87,12 @@ def cadastro():
             messagebox.showerror("Erro", "Este login ja existe, digite outro")
 
 
-def login():
+def login(login, senha):
     global iduser
 
     while(True):
-        login = simpledialog.askstring(title = "Login", prompt="Digite seu login")
         if login == None:
             return False
-        senha = simpledialog.askstring(title = "Senha", prompt="Digite sua senha", show="\u2022")
 
         if senha == None:
             return False

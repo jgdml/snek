@@ -54,14 +54,46 @@ def textInput(posX, posY, txt, evento, txtIn):
         caixa = engine.draw.rect(tela, branco, caixa)
         
         if evento != None and evento.type == engine.KEYDOWN:
-            return evento.unicode
+            return evento.key if evento.key == engine.K_BACKSPACE else evento.unicode
 
     tela.blit(txtInShow, (posX - txtInSize[0] / 2, posY - txtInSize[1] / 2))
     
     return ""
 
+def quebra():
+    return True
 
 def inicio(login, cadastro):
+    def cadastroTela():
+        loginTxt = ""
+        senhaTxt = ""
+
+        while(True):
+            tela.fill(bg)
+
+            evento = event()
+
+            if textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt) == engine.K_BACKSPACE:
+                loginTxt = loginTxt[0: len(loginTxt) - 1]
+            else:
+                loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+
+            if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt)) == engine.K_BACKSPACE:
+                senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
+                
+            else:
+                senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
+
+            if boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[5], lambda: cadastro(loginTxt, senhaTxt)):
+                break
+
+        
+            boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra)
+
+            engine.display.update()
+            relogio.tick_busy_loop(limiteFps)
+
+
     loginTxt = ""
     senhaTxt = ""
 
@@ -70,29 +102,37 @@ def inicio(login, cadastro):
 
         evento = event()
 
-        loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+        if textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt) == engine.K_BACKSPACE:
+            loginTxt = loginTxt[0: len(loginTxt) - 1]
+        else:
+            loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
 
-        senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
+        if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt)) == engine.K_BACKSPACE:
+            senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
+            
+        else:
+            senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
 
-        boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], login)
+        if boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], lambda: login(loginTxt, senhaTxt)):
+            break
 
-        boxMenu("Não tenho cadastro", evento, resolucao[0] * 0.23, resolucao[1] * 0.952, cadastro)
+        boxMenu("Não tenho cadastro", evento, resolucao[0] * 0.23, resolucao[1] * 0.952, cadastroTela)
 
         engine.display.update()
         
-        relogio.tick_busy_loop(60)
+        relogio.tick_busy_loop(limiteFps)
     
     
 
 def menu(high, skin):
     global corCobra
-    
 
     while(True):
         tela.fill(bg)
         evento = event()
 
-        boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[1], breakpoint)
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[1], lambda: quebra()):
+            break
 
         boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[2], high)
 
@@ -102,7 +142,7 @@ def menu(high, skin):
 
         engine.display.update()
         
-        relogio.tick_busy_loop(60)
+        relogio.tick_busy_loop(limiteFps)
     
     corCobra = getCor()
 

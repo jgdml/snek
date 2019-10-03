@@ -4,7 +4,7 @@ from threading import Thread as th
 from LoadGame import render, relogio, keyPress, engine, inicio, menu
 from User import login, cadastro, mostrarScores, mudarSkin
 
-inicio(lambda : login(), lambda: cadastro())
+inicio(lambda loginTxt, senhaTxt : login(loginTxt, senhaTxt), lambda loginTxt, senhaTxt: cadastro(loginTxt, senhaTxt))
 
 menu(lambda: mostrarScores(), lambda : mudarSkin())
 
