@@ -17,6 +17,8 @@ while(True):
     ## ele n printar em outra linha
     print("\t", int(relogio.get_fps()), end="\r")
 
+    checkScore()
+
     ## se tiver eventos acontecendo ele vai pegar o evento
     for event in engine.event.get():
 
@@ -27,8 +29,8 @@ while(True):
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
             if keyPress(event.key):
-                menu(lambda: mostrarScores(), lambda : mudarSkin())
-            checkScore()
+                menu()
+    
 
         ## se for sair ele fecha tudo
         elif event.type == engine.QUIT:

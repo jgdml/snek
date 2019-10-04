@@ -203,7 +203,7 @@ def colisaoComida(obj1, obj2):
 
     if obj1.colliderect(obj2):
         calda += 1
-        vel += tam[0] * 0.02
+        vel += tam[0] * 0.01
         novaComida()
 
 
@@ -256,7 +256,7 @@ def keyPress(tecla):
         reset = True
 
     elif tecla == engine.K_ESCAPE and fim:
-        return True
+        return tecla
 
     else:
         movimentos(tecla)
@@ -311,14 +311,18 @@ def resetAll():
 
 
 def checkScore():
-    if fim:
+    global upload
+    if upload:
         uploadScore((calda - tamInicial) * 500)
+        upload = False
 
 
 def render():
     global calda, fim
 
     def gameover():
+        global upload
+        upload = True
         ## tela de gameover
         player = engine.draw.rect(tela, corCobra, rectPlayer)
         comida = engine.draw.rect(tela, vermelho, posComida)
@@ -480,6 +484,8 @@ posSair = (resolucao[0] / 2 - sair.get_size()[0] / 2, posRestart[1] - sair.get_s
 ## pra resetar o jogo se o usuario
 ## apertar R
 reset = False
+
+upload = False
 
 ## pra informar que o jogo acabou
 fim = False
