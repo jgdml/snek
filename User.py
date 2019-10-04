@@ -173,9 +173,12 @@ def delSessao():
 
 def uploadScore(score):
     print(score)
+    data = datetime.now().strftime("%d%m%y")
+    print(data)
+
     cursor.execute(f"""
     INSERT INTO highscores
-    VALUES (null, "{score}", {datetime.now().strftime("%y%m%d")}, "{iduser}")
+    VALUES (null, "{score}", {data}, "{iduser}")
     """)
     conn.commit()
 

@@ -108,7 +108,7 @@ def inicio():
                 resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
 
             resRenderS = resRender.get_size()
-            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.47))
+            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
         
             if boxMenu("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.952, quebra):
                 break
@@ -447,10 +447,10 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w * 0.75), int(getRes.current_h * 0.75)]
+resolucao = [int(getRes.current_w), int(getRes.current_h)]
 
 ##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao)
+tela = engine.display.set_mode(resolucao, engine.FULLSCREEN)
 
 posCaixa = []
 for i in range(1, 21):
