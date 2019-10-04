@@ -63,9 +63,9 @@ def textInput(posX, posY, txt, evento, txtIn):
     return ""
 
 def quebra():
-    global reset, stop
+    global reset
     reset = True
-    stop = False
+    fim = False
     return True
 
 def inicio():
@@ -334,7 +334,7 @@ def resetAll():
 def checkScore():
     global upload
     if upload:
-        uploadScore((calda - tamInicial) * 500)
+        uploadScore((calda - tamInicial) * 450)
         upload = False
 
 
@@ -374,7 +374,7 @@ def render():
     ## tamanho da calda
     calda = tamInicial
 
-    if stop != True:
+    if fim != True:
         while(True):
             ## pintar a tela de preto
             tela.fill(bg)
@@ -488,7 +488,7 @@ verde = 50, 255, 50
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.0285))
+fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.0265))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)
@@ -510,8 +510,6 @@ reset = False
 fim = False
 
 upload = False
-
-stop = True
 
 
 novaComida()
