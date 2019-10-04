@@ -2,11 +2,10 @@ from os import _exit
 from time import sleep
 from threading import Thread as th
 from LoadGame import render, relogio, keyPress, engine, inicio, menu, checkScore
-from User import login, cadastro, mostrarScores, mudarSkin
 
-inicio(lambda loginTxt, senhaTxt : login(loginTxt, senhaTxt), lambda loginTxt, senhaTxt: cadastro(loginTxt, senhaTxt))
+inicio()
 
-menu(lambda: mostrarScores(), lambda : mudarSkin())
+menu()
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto
 th(target=render).start()

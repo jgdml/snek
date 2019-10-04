@@ -2,7 +2,7 @@ import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
-from User import getCor, uploadScore
+from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores
 
 def event():
     for event in engine.event.get():
@@ -67,7 +67,7 @@ def quebra():
     reset = True
     return True
 
-def inicio(login, cadastro):
+def inicio():
     def cadastroTela():
         loginTxt = ""
         senhaTxt = ""
@@ -152,21 +152,20 @@ def inicio(login, cadastro):
         
         relogio.tick_busy_loop(limiteFps)
     
-    
 
-def menu(high, skin):
+def menu():
     global corCobra
 
     while(True):
         tela.fill(bg)
         evento = event()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[2], lambda: quebra()):
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[2], quebra):
             break
 
-        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[3], high)
+        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[3], mostrarScores)
 
-        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[4], skin)
+        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[4], mudarSkin)
 
         boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[5], lambda: _exit(0))
 
