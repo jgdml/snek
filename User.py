@@ -1,6 +1,6 @@
 import sqlite3
 from tkinter.colorchooser import *
-from tkinter import Tk, simpledialog, colorchooser, messagebox
+from tkinter import Tk, colorchooser
 from datetime import datetime
 
 root = Tk()
@@ -38,84 +38,73 @@ CREATE TABLE IF NOT EXISTS skin (
 
 def cadastro(login, senha):
 
-    while(True):
+    checkLogin = f"""
+    SELECT login, idUser FROM usuario
+    WHERE login == "{login}";
+    """
 
-        if login == None:
-            return False
+    cadastrar = f"""
+    INSERT INTO usuario 
+    VALUES (null, "{login}", "{senha}");
+    """
 
-        if senha == None:
-            return False
+    cursor.execute(checkLogin)
+    resultado = cursor.fetchall()
 
-        checkLogin = f"""
-        SELECT login, idUser FROM usuario
-        WHERE login == "{login}";
-        """
-
-        cadastrar = f"""
-        INSERT INTO usuario 
-        VALUES (null, "{login}", "{senha}");
-        """
+    if resultado == [] and login != "" and senha != "":
+        cursor.execute(cadastrar)
+        conn.commit()
 
         cursor.execute(checkLogin)
-        resultado = cursor.fetchall()
+        res = cursor.fetchall()
 
-        if resultado == [] and login != "" and senha != "":
-            cursor.execute(cadastrar)
-            conn.commit()
+        iduser = res[0][1]
 
-            cursor.execute(checkLogin)
-            res = cursor.fetchall()
+        cursor.execute(f"""
+        INSERT INTO skin 
+        VALUES (null, "255", "255", "255", {iduser})
+        """)
+        conn.commit()
+        return f"O login {login} cadastrado com sucesso."
 
-            iduser = res[0][1]
+    elif login == "":
+        return "Digite um login."
 
-            cursor.execute(f"""
-            INSERT INTO skin 
-            VALUES (null, "255", "255", "255", {iduser})
-            """)
-            conn.commit()
+    elif senha == "":
+        return "Digite uma senha."
 
-            messagebox.showinfo("Sucesso", f"{login} cadastrado com sucesso")
-            break
-
-        elif login == "":
-            messagebox.showerror("Erro", "Digite um login")
-
-        elif senha == "":
-            messagebox.showerror("Erro", "Digite uma senha")
-
-        else:
-            messagebox.showerror("Erro", "Este login ja existe, digite outro")
+    else:
+        return "Este login ja existe, digite outro."
 
 
 def login(login, senha):
     global iduser
 
-    while(True):
-        if login == None:
-            return False
+    if login == None:
+        return False
 
-        if senha == None:
-            return False
+    if senha == None:
+        return False
 
-        selectLogin = f"""
-        SELECT idUser, login, senha FROM usuario
-        WHERE login == "{login}";
-        """
+    selectLogin = f"""
+    SELECT idUser, login, senha FROM usuario
+    WHERE login == "{login}";
+    """
 
-        cursor.execute(selectLogin)
-        resultado = cursor.fetchall()
+    cursor.execute(selectLogin)
+    resultado = cursor.fetchall()
 
-        if resultado != []:
+    if resultado != []:
 
-            if senha == resultado[0][2]:
-                iduser = resultado[0][0]
-                return True
+        if senha == resultado[0][2]:
+            iduser = resultado[0][0]
+            return True
 
-            else:
-                messagebox.showerror("Erro", "Senha incorreta, tente novamente")
-    
         else:
-            messagebox.showerror("Erro", "Este login não existe, digite outro")
+            return "Senha incorreta, tente novamente"
+
+    else:
+        return "Este login não existe, digite outro"
 
 
 def mudarSkin():

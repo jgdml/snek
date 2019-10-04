@@ -69,9 +69,11 @@ def inicio(login, cadastro):
     def cadastroTela():
         loginTxt = ""
         senhaTxt = ""
+        resultado = ""
 
         while(True):
             tela.fill(bg)
+            
 
             evento = event()
 
@@ -86,9 +88,19 @@ def inicio(login, cadastro):
             else:
                 senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
 
-            if boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[5], lambda: cadastro(loginTxt, senhaTxt)):
-                break
+        
+            ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[5], lambda: cadastro(loginTxt, senhaTxt))
+            if ret != None:
+                resultado = ret
+            
 
+            if ret != None and ret[0] == "O":
+                resRender = engine.font.Font.render(fonte, resultado, True, verde)  
+            else:  
+                resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
+
+            resRenderS = resRender.get_size()
+            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] *0.47))
         
             if boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra):
                 break
@@ -99,6 +111,7 @@ def inicio(login, cadastro):
 
     loginTxt = ""
     senhaTxt = ""
+    resultado = ""
 
     while(True):
         tela.fill(bg)
@@ -116,8 +129,15 @@ def inicio(login, cadastro):
         else:
             senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
 
-        if boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], lambda: login(loginTxt, senhaTxt)):
+        ret = boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], lambda: login(loginTxt, senhaTxt))
+        if ret == True:
             break
+        elif ret != None:
+            resultado = ret
+        
+        resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
+        resRenderS = resRender.get_size()
+        tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] *0.47))
 
         boxMenu("Não tenho cadastro", evento, resolucao[0] * 0.23, resolucao[1] * 0.952, cadastroTela)
 
@@ -426,12 +446,13 @@ tamInicial = 10
 bg = 10, 10, 10
 branco = 255, 255, 255
 vermelho = 255, 100, 100
+verde = 50, 255, 50
 
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.SysFont("monospace", int(resolucao[0] * 0.035))
+fonte = engine.font.SysFont("monospace_bold", int(resolucao[0] * 0.035))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)
