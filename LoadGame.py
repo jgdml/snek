@@ -87,7 +87,7 @@ def inicio(login, cadastro):
                 loginTxt += retLogin
 
 
-            retSenha = textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
+            retSenha = textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
 
             if retSenha == engine.K_BACKSPACE:
                 senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
@@ -109,7 +109,7 @@ def inicio(login, cadastro):
             resRenderS = resRender.get_size()
             tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.47))
         
-            if boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra):
+            if boxMenu("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.952, quebra):
                 break
 
             engine.display.update()
@@ -130,11 +130,11 @@ def inicio(login, cadastro):
         else:
             loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
 
-        if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt)) == engine.K_BACKSPACE:
+        if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt)) == engine.K_BACKSPACE:
             senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
             
         else:
-            senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
+            senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
 
         ret = boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], lambda: login(loginTxt, senhaTxt))
         if ret == True:
@@ -144,9 +144,9 @@ def inicio(login, cadastro):
         
         resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
         resRenderS = resRender.get_size()
-        tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] *0.47))
+        tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
 
-        boxMenu("Não tenho cadastro", evento, resolucao[0] * 0.23, resolucao[1] * 0.952, cadastroTela)
+        boxMenu("Cadastrar-se", evento, resolucao[0] * 0.178, resolucao[1] * 0.952, cadastroTela)
 
         engine.display.update()
         
@@ -254,7 +254,6 @@ def keyPress(tecla):
     global reset
 
     if tecla == engine.K_r and fim:
-        uploadScore((calda - tamInicial) * 500)
         reset = True
 
     elif tecla == engine.K_ESCAPE and fim:
@@ -310,6 +309,12 @@ def resetAll():
     vel = tam[0] * 0.2
     rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
     novaComida()
+
+
+def checkScore():
+    if fim:
+        uploadScore((calda - tamInicial) * 500)
+
 
 def render():
     global calda, fim
@@ -418,7 +423,7 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
+resolucao = [int(getRes.current_w * 0.5), int(getRes.current_h * 0.5)]
 
 ##inicia a tela com a resolucao
 tela = engine.display.set_mode(resolucao)
@@ -459,7 +464,7 @@ verde = 50, 255, 50
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.SysFont("monospace_bold", int(resolucao[0] * 0.035))
+fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.035))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)

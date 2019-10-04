@@ -1,7 +1,7 @@
 from os import _exit
 from time import sleep
 from threading import Thread as th
-from LoadGame import render, relogio, keyPress, engine, inicio, menu
+from LoadGame import render, relogio, keyPress, engine, inicio, menu, checkScore
 from User import login, cadastro, mostrarScores, mudarSkin
 
 inicio(lambda loginTxt, senhaTxt : login(loginTxt, senhaTxt), lambda loginTxt, senhaTxt: cadastro(loginTxt, senhaTxt))
@@ -29,6 +29,7 @@ while(True):
             ## q o cara aperto
             if keyPress(event.key):
                 menu(lambda: mostrarScores(), lambda : mudarSkin())
+            checkScore()
 
         ## se for sair ele fecha tudo
         elif event.type == engine.QUIT:
