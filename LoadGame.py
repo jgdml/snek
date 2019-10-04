@@ -22,7 +22,7 @@ def boxMenu(texto, evento, posX, posY, func):
 
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
 
-    caixa = engine.draw.rect(tela, branco, caixa, 1)
+    caixa = engine.draw.rect(tela, branco, caixa, 2)
     
 
     if caixa.collidepoint(engine.mouse.get_pos()):
@@ -42,12 +42,14 @@ def textInput(posX, posY, txt, evento, txtIn):
     txtInShow = engine.font.Font.render(fonte, txtIn, True, branco)
     txtInSize = txtInShow.get_size()
 
-    rectTam = resolucao[0] * 0.4, resolucao[1] * 0.07
+    rectTam = [resolucao[0] * 0.2, resolucao[1] * 0.07]
+    if txtInSize[0] > rectTam[0]:
+        rectTam[0] = txtInSize[0]
 
     tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] * 2))
 
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
-    caixa = engine.draw.rect(tela, branco, caixa, 1)
+    caixa = engine.draw.rect(tela, branco, caixa, 2)
 
     if caixa.collidepoint(engine.mouse.get_pos()):
         txtInShow = engine.font.Font.render(fonte, txtIn, True, bg)
@@ -70,37 +72,42 @@ def inicio(login, cadastro):
         loginTxt = ""
         senhaTxt = ""
         resultado = ""
-
+        resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
         while(True):
             tela.fill(bg)
             
 
             evento = event()
 
-            if textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt) == engine.K_BACKSPACE:
+            retLogin = textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+
+            if retLogin == engine.K_BACKSPACE:
                 loginTxt = loginTxt[0: len(loginTxt) - 1]
             else:
-                loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+                loginTxt += retLogin
 
-            if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt)) == engine.K_BACKSPACE:
+
+            retSenha = textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
+
+            if retSenha == engine.K_BACKSPACE:
                 senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
                 
             else:
-                senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "\u2022" * len(senhaTxt))
+                senhaTxt += retSenha
 
         
             ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[5], lambda: cadastro(loginTxt, senhaTxt))
             if ret != None:
                 resultado = ret
             
-
+            
             if ret != None and ret[0] == "O":
-                resRender = engine.font.Font.render(fonte, resultado, True, verde)  
-            else:  
+                resRender = engine.font.Font.render(fonte, resultado, True, verde)
+            elif ret != None:  
                 resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
 
             resRenderS = resRender.get_size()
-            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] *0.47))
+            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.47))
         
             if boxMenu("<", evento, resolucao[0] * 0.1, resolucao[1] * 0.952, quebra):
                 break

@@ -65,7 +65,7 @@ def cadastro(login, senha):
         VALUES (null, "255", "255", "255", {iduser})
         """)
         conn.commit()
-        return f"O login {login} cadastrado com sucesso."
+        return f"O login {login} foi cadastrado com sucesso."
 
     elif login == "":
         return "Digite um login."
