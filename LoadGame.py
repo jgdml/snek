@@ -190,6 +190,7 @@ def menu():
         delSessao()
         logoutConta()
     corCobra = getCor()
+    corBorda = getCor()
 
 
 def logoutConta():
@@ -224,7 +225,7 @@ def colisaoComida(obj1, obj2):
 
     if obj1.colliderect(obj2):
         calda += 1
-        vel += tam[0] * 0.01
+        vel += resolucao[1] * 0.0001
         novaComida()
 
 
@@ -277,7 +278,7 @@ def keyPress(tecla):
         reset = True
 
     elif tecla == engine.K_ESCAPE and fim:
-        return tecla
+        return "esc"
 
     else:
         movimentos(tecla)
@@ -347,6 +348,7 @@ def render():
         ## tela de gameover
         player = engine.draw.rect(tela, corCobra, rectPlayer)
         comida = engine.draw.rect(tela, vermelho, posComida)
+        engine.draw.rect(tela, vermelho, comida, 3)
         tela.blit(score, posScore)
         tela.blit(restart, posRestart)
         tela.blit(sair, posSair)
@@ -357,6 +359,7 @@ def render():
 
             ## desenhar cada parte da calda
             c = engine.draw.rect(tela, corCobra, arr[len(arr) - delayCalda * (i + 1)])
+            engine.draw.rect(tela, corBorda, c, 3)
 
             ## checar se o player colidiu com a calda
             if player.colliderect(c) and i > 9:
@@ -407,8 +410,11 @@ def render():
             ## pra ficar em cima da calda
             player = engine.draw.rect(tela, corCobra, rectPlayer)
 
+            player = engine.draw.rect(tela, corBorda, player, 3)
+
             ## desenhar comida
             comida = engine.draw.rect(tela, vermelho, posComida)
+            engine.draw.rect(tela, vermelho, comida, 3)
 
             ## dando update no score
             score = fonte.render(str((calda - tamInicial) * 450), True, branco)
@@ -483,6 +489,7 @@ bg = 10, 10, 10
 branco = 255, 255, 255
 vermelho = 255, 100, 100
 verde = 50, 255, 50
+corBorda = 255, 255, 255
 
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"

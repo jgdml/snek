@@ -30,7 +30,7 @@ while(True):
             ## quando o evento é tecla pressionada
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
-            if keyPress(event.key):
+            if keyPress(event.key) == "esc":
                 menu()
     
 
