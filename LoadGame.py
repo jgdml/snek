@@ -114,7 +114,6 @@ def inicio():
                 break
 
             engine.display.update()
-            relogio.tick_busy_loop(limiteFps)
 
 
     loginTxt = ""
@@ -158,7 +157,6 @@ def inicio():
 
         engine.display.update()
         
-        relogio.tick_busy_loop(limiteFps)
     
 
 def menu():
@@ -184,7 +182,6 @@ def menu():
 
         engine.display.update()
         
-        relogio.tick_busy_loop(limiteFps)
     
     if log != True:
         delSessao()
@@ -253,10 +250,10 @@ def paredeMorte(rect):
 
     ## esses sao para finalizar o jogo quando
     ## o player toca a parede
-    if rect[0] > resolucao[0] or rect[0] < 1:
+    if rect[0] > resolucao[0] - rect[2] or rect[0] < 1:
         val = True
 
-    if rect[1] > resolucao[1] or rect[1] < 1:
+    if rect[1] > resolucao[1] - rect[3] or rect[1] < 1:
         val = True
 
     return val
