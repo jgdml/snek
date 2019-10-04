@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS highscores (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS skin (
     idSkin INTEGER PRIMARY KEY,
-    vermelho TEXT NOT NULL,
-    verde TEXT NOT NULL,
-    azul TEXT NOT NULL,
+    r TEXT NOT NULL,
+    g TEXT NOT NULL,
+    b TEXT NOT NULL,
     idUser INTEGER UNIQUE,
     FOREIGN KEY (idUser) REFERENCES usuario(idUser)
 );""")
@@ -122,7 +122,7 @@ def mudarSkin():
 
         cursor.execute(f"""
         UPDATE skin 
-        SET vermelho = "{rgb[0]}", verde = "{rgb[1]}", azul = "{rgb[2]}"
+        SET r = "{rgb[0]}", g = "{rgb[1]}", b = "{rgb[2]}"
         WHERE idUser = {iduser}
         """)
         conn.commit()
@@ -130,7 +130,7 @@ def mudarSkin():
 
 def getCor():
     cursor.execute(f"""
-    SELECT vermelho, verde, azul FROM skin 
+    SELECT r, g, b FROM skin 
     WHERE idUser = {iduser};
     """)
 

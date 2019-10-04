@@ -160,7 +160,7 @@ def inicio():
     
 
 def menu():
-    global corCobra
+    global corCobra, corBorda
     log = True
 
     while(True):
@@ -486,7 +486,6 @@ bg = 10, 10, 10
 branco = 255, 255, 255
 vermelho = 255, 100, 100
 verde = 50, 255, 50
-corBorda = 255, 255, 255
 
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
