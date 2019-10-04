@@ -18,7 +18,7 @@ def boxMenu(texto, evento, posX, posY, func):
     txtSize = fonte.size(texto)
     txt = engine.font.Font.render(fonte, texto, True, branco)
 
-    rectTam = txtSize[0] + resolucao[0] * 0.1, txtSize[1] + resolucao[1] * 0.04
+    rectTam = txtSize[0] + resolucao[0] * 0.1, txtSize[1] + resolucao[1] * 0.027
 
     caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
 
@@ -39,10 +39,10 @@ def textInput(posX, posY, txt, evento, txtIn):
     txt = engine.font.Font.render(fonte, txt, True, branco)
     txtSize = txt.get_size()
 
-    txtInShow = engine.font.Font.render(fonte, txtIn, True, branco)
+    txtInShow = engine.font.Font.render(fonte, txtIn + "|", True, branco)
     txtInSize = txtInShow.get_size()
 
-    rectTam = [resolucao[0] * 0.2, resolucao[1] * 0.07]
+    rectTam = [resolucao[0] * 0.2, resolucao[1] * 0.06]
     if txtInSize[0] > rectTam[0]:
         rectTam[0] = txtInSize[0]
 
@@ -52,7 +52,7 @@ def textInput(posX, posY, txt, evento, txtIn):
     caixa = engine.draw.rect(tela, branco, caixa, 2)
 
     if caixa.collidepoint(engine.mouse.get_pos()):
-        txtInShow = engine.font.Font.render(fonte, txtIn, True, bg)
+        txtInShow = engine.font.Font.render(fonte, (txtIn + "|"), True, bg)
         caixa = engine.draw.rect(tela, branco, caixa)
         
         if evento != None and evento.type == engine.KEYDOWN:
@@ -63,8 +63,9 @@ def textInput(posX, posY, txt, evento, txtIn):
     return ""
 
 def quebra():
-    global reset
+    global reset, stop
     reset = True
+    stop = False
     return True
 
 def inicio():
@@ -168,18 +169,18 @@ def menu():
         tela.fill(bg)
         evento = event()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[2], quebra):
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[9], quebra):
             break
 
-        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[3], mostrarScores)
+        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[11], mostrarScores)
 
-        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[4], mudarSkin)
+        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[13], mudarSkin)
 
-        if boxMenu("Logout", evento, resolucao[0] / 2, posCaixa[5], quebra):
+        if boxMenu("Logout", evento, resolucao[0] / 2, posCaixa[15], quebra):
             log = False
             break
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[6], lambda: _exit(0))
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], lambda: _exit(0))
 
         engine.display.update()
         
@@ -373,68 +374,68 @@ def render():
     ## tamanho da calda
     calda = tamInicial
 
+    if stop != True:
+        while(True):
+            ## pintar a tela de preto
+            tela.fill(bg)
 
-    while(True):
-        ## pintar a tela de preto
-        tela.fill(bg)
+            ## desenhar player
+            player = engine.draw.rect(tela, corCobra, rectPlayer)
 
-        ## desenhar player
-        player = engine.draw.rect(tela, corCobra, rectPlayer)
+            ## colocar a posiçao da cobra 
+            ## em um array para usar para
+            ## desenhar a calda
+            arr.append(player)
 
-        ## colocar a posiçao da cobra 
-        ## em um array para usar para
-        ## desenhar a calda
-        arr.append(player)
+            ## se uma dessas funçoes retornar true
+            ## significa que o player encostou na calda
+            ## ou colidiu ocm a parede
+            if drawCalda() or colisaoParede(player):
+                fim = True
+                gameover()
 
-        ## se uma dessas funçoes retornar true
-        ## significa que o player encostou na calda
-        ## ou colidiu ocm a parede
-        if drawCalda() or colisaoParede(player):
-            fim = True
-            gameover()
+                while(True):
 
-            while(True):
-
-                if reset:
-                    resetAll()
-                    arr = [rectPlayer] * tamInicial
-                    calda = tamInicial
-                    break
-
-
-        ## desenhar a cobra denovo
-        ## pra ficar em cima da calda
-        player = engine.draw.rect(tela, corCobra, rectPlayer)
-
-        ## desenhar comida
-        comida = engine.draw.rect(tela, vermelho, posComida)
-
-        ## dando update no score
-        score = fonte.render(str((calda - tamInicial) * 500), True, branco)
-
-        ## update na posiçao do score
-        posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
-
-        ## colocando score na tela
-        tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
+                    if reset:
+                        resetAll()
+                        arr = [rectPlayer] * tamInicial
+                        calda = tamInicial
+                        break
 
 
-        ## fazer a cobra andar um pouco a cada frame
-        autoRun()
+            ## desenhar a cobra denovo
+            ## pra ficar em cima da calda
+            player = engine.draw.rect(tela, corCobra, rectPlayer)
 
-        ## chama essa funcao a cada frame
-        ## pro bot analisar e decidir oq fazer
-        # bot()
+            ## desenhar comida
+            comida = engine.draw.rect(tela, vermelho, posComida)
 
-        ## checa se o player colidiu com a comida
-        colisaoComida(player, comida)
+            ## dando update no score
+            score = fonte.render(str((calda - tamInicial) * 450), True, branco)
 
-        ## fazer um update senao fica td bugado
-        engine.display.update()
+            ## update na posiçao do score
+            posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
 
-        ## esse relogio.tick substitui o sleep
-        ## o parametro dele é o máximo de fps que o jogo vai rodar
-        relogio.tick_busy_loop(limiteFps)
+            ## colocando score na tela
+            tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
+
+
+            ## fazer a cobra andar um pouco a cada frame
+            autoRun()
+
+            ## chama essa funcao a cada frame
+            ## pro bot analisar e decidir oq fazer
+            # bot()
+
+            ## checa se o player colidiu com a comida
+            colisaoComida(player, comida)
+
+            ## fazer um update senao fica td bugado
+            engine.display.update()
+
+            ## esse relogio.tick substitui o sleep
+            ## o parametro dele é o máximo de fps que o jogo vai rodar
+            relogio.tick_busy_loop(limiteFps)
 
 
 ## inicia tudo do pygame
@@ -446,7 +447,7 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w * 0.5), int(getRes.current_h * 0.5)]
+resolucao = [int(getRes.current_w * 0.75), int(getRes.current_h * 0.75)]
 
 ##inicia a tela com a resolucao
 tela = engine.display.set_mode(resolucao)
@@ -487,7 +488,7 @@ verde = 50, 255, 50
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.035))
+fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.0285))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)
@@ -505,9 +506,12 @@ posSair = (resolucao[0] / 2 - sair.get_size()[0] / 2, posRestart[1] - sair.get_s
 ## apertar R
 reset = False
 
-upload = False
-
 ## pra informar que o jogo acabou
 fim = False
+
+upload = False
+
+stop = True
+
 
 novaComida()
