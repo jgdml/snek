@@ -35,6 +35,10 @@ CREATE TABLE IF NOT EXISTS skin (
     FOREIGN KEY (idUser) REFERENCES usuario(idUser)
 );""")
 
+cursor.execute("""CREATE TABLE IF NOT EXISTS sessao(
+    id INTEGER NOT NULL
+)""")
+
 
 def cadastro(login, senha):
 
@@ -98,6 +102,7 @@ def login(login, senha):
 
         if senha == resultado[0][2]:
             iduser = resultado[0][0]
+            logSessao()
             return True
 
         else:
@@ -136,6 +141,35 @@ def getCor():
         rgb.append(int(resultado[0][i]))
     
     return rgb
+
+
+def logSessao():
+    cursor.execute(f"""INSERT INTO sessao
+    VALUES({iduser})""")
+
+    conn.commit()
+
+
+def checkSessao():
+    cursor.execute("""
+    SELECT * FROM usuario 
+    INNER JOIN sessao
+    ON sessao.id = usuario.idUser
+    """)
+
+    res = cursor.fetchall()
+    
+    if res != []:
+        return login(res[0][1], res[0][2])
+
+    else:
+        return False
+
+def delSessao():
+    cursor.execute("""
+    DELETE FROM sessao""")
+    conn.commit()
+
 
 def uploadScore(score):
     print(score)

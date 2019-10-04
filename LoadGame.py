@@ -2,7 +2,7 @@ import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
-from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores
+from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores, logSessao, delSessao
 
 def event():
     for event in engine.event.get():
@@ -79,7 +79,7 @@ def inicio():
 
             evento = event()
 
-            retLogin = textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+            retLogin = textInput(resolucao[0] / 2, posCaixa[10], "Login", evento, loginTxt)
 
             if retLogin == engine.K_BACKSPACE:
                 loginTxt = loginTxt[0: len(loginTxt) - 1]
@@ -87,7 +87,7 @@ def inicio():
                 loginTxt += retLogin
 
 
-            retSenha = textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
+            retSenha = textInput(resolucao[0] / 2, posCaixa[13], "Senha", evento, "*" * len(senhaTxt))
 
             if retSenha == engine.K_BACKSPACE:
                 senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
@@ -96,7 +96,7 @@ def inicio():
                 senhaTxt += retSenha
 
         
-            ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[5], lambda: cadastro(loginTxt, senhaTxt))
+            ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[17], lambda: cadastro(loginTxt, senhaTxt))
             if ret != None:
                 resultado = ret
             
@@ -125,18 +125,25 @@ def inicio():
 
         evento = event()
 
-        if textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt) == engine.K_BACKSPACE:
+        retLogin = textInput(resolucao[0] / 2, posCaixa[10], "Login", evento, loginTxt)
+
+        if retLogin == engine.K_BACKSPACE:
             loginTxt = loginTxt[0: len(loginTxt) - 1]
         else:
-            loginTxt += textInput(resolucao[0] / 2, posCaixa[3], "Login", evento, loginTxt)
+            loginTxt += retLogin
 
-        if textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt)) == engine.K_BACKSPACE:
+
+
+        retSenha = textInput(resolucao[0] / 2, posCaixa[13], "Senha", evento, "*" * len(senhaTxt))
+
+        if retSenha == engine.K_BACKSPACE:
             senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
             
         else:
-            senhaTxt += textInput(resolucao[0] / 2, posCaixa[4], "Senha", evento, "*" * len(senhaTxt))
+            senhaTxt += retSenha
 
-        ret = boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[5], lambda: login(loginTxt, senhaTxt))
+
+        ret = boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt))
         if ret == True:
             break
         elif ret != None:
@@ -155,6 +162,7 @@ def inicio():
 
 def menu():
     global corCobra
+    log = True
 
     while(True):
         tela.fill(bg)
@@ -167,13 +175,25 @@ def menu():
 
         boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[4], mudarSkin)
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[5], lambda: _exit(0))
+        if boxMenu("Logout", evento, resolucao[0] / 2, posCaixa[5], quebra):
+            log = False
+            break
+
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[6], lambda: _exit(0))
 
         engine.display.update()
         
         relogio.tick_busy_loop(limiteFps)
     
+    if log != True:
+        delSessao()
+        logoutConta()
     corCobra = getCor()
+
+
+def logoutConta():
+    inicio()
+    menu()
 
 
 def autoRun():
@@ -432,8 +452,8 @@ resolucao = [int(getRes.current_w * 0.5), int(getRes.current_h * 0.5)]
 tela = engine.display.set_mode(resolucao)
 
 posCaixa = []
-for i in range(1, 8):
-    posCaixa.append((resolucao[1] / 7) * i)
+for i in range(1, 21):
+    posCaixa.append((resolucao[1] / 20) * i)
 
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
