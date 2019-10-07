@@ -23,16 +23,18 @@ def slider(posX, posY, cor, val):
         cor = 50, 50, 255
     branco = 255, 255, 255
 
-    val = engine.font.Font.render(fonte, val, True, branco)
+    displayVal = engine.font.Font.render(fonte, str(val), True, branco)
     rect = [posX, posY, resolucao[0] * 0.2, resolucao[1] * 0.02]
-    rect[0] = posX - rect[2]
-    rect[1] = posY - rect[3]
-
+    rect[0] = posX - rect[2] / 2
     
+
+    rectPointer = [(posX - rect[0]), posY, rect[2] * 0.046, rect[3]]
+    rectPointer[0] = int(rectPointer[0] * val)
 
     engine.draw.rect(tela, cor, rect)
     engine.draw.rect(tela, branco, rect, 2)
-    tela.blit(val, (rect[0], rect[1] - 30))
+    tela.blit(displayVal, (rect[0], rect[1] - 30))
+    engine.draw.rect(tela, branco, rectPointer)
 
     return val
 
@@ -188,6 +190,8 @@ def inicio():
 def menu():
     global corCobra, corBorda
     log = True
+    corCobra = getCor("base")
+    corBorda = getCor("borda")
 
     while(True):
         tela.fill(bg)
@@ -212,18 +216,21 @@ def menu():
     if log != True:
         delSessao()
         logoutConta()
-    corCobra = getCor("base")
-    corBorda = getCor("borda")
+    
 
 
 def logoutConta():
     inicio()
     menu()
 
+def string(v):
+    return str(v)
 
 def mudarCores():
     global corCobra, corBorda
-    v = "2"
+    vals = [corCobra, corBorda]
+    
+
     while(True):
         tela.fill(bg)
         eventos = event()
@@ -231,9 +238,9 @@ def mudarCores():
         
 
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.965, quebra):
-                break
+            break
 
-        slider(250, 100, "r", v)
+        slider(resolucao[0] / 2, resolucao[1] / 2, "r", vals[0][0])
 
         engine.display.update()
 
