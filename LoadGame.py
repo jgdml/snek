@@ -186,8 +186,8 @@ def menu():
     if log != True:
         delSessao()
         logoutConta()
-    corCobra = getCor()
-    corBorda = getCor()
+    corCobra = getCor("base")
+    corBorda = getCor("borda")
 
 
 def logoutConta():

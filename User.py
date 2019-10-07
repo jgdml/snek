@@ -4,41 +4,57 @@ from tkinter.colorchooser import *
 from tkinter import Tk, colorchooser
 from datetime import datetime
 
-root = Tk()
-root.withdraw()
+def criarTabelas():
 
-conn = sqlite3.connect("BD")
-cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS usuario (
+        idUser INTEGER PRIMARY KEY,
+        login TEXT NOT NULL,
+        senha TEXT NOT NULL
+    );""")
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS usuario (
-    idUser INTEGER PRIMARY KEY,
-    login TEXT NOT NULL,
-    senha TEXT NOT NULL
-);""")
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS highscores (
-    idHigh INTEGER PRIMARY KEY,
-    score INT NOT NULL,
-    data DATE NOT NULL,
-    idUser INTEGER,
-    FOREIGN KEY (idUser) REFERENCES usuario(idUser)
-);""")
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS highscores (
+        idHigh INTEGER PRIMARY KEY,
+        score INT NOT NULL,
+        data DATE NOT NULL,
+        idUser INTEGER,
+        FOREIGN KEY (idUser) REFERENCES usuario(idUser)
+    );""")
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS skin (
-    idSkin INTEGER PRIMARY KEY,
-    r TEXT NOT NULL,
-    g TEXT NOT NULL,
-    b TEXT NOT NULL,
-    idUser INTEGER UNIQUE,
-    FOREIGN KEY (idUser) REFERENCES usuario(idUser)
-);""")
 
-cursor.execute("""CREATE TABLE IF NOT EXISTS sessao(
-    id INTEGER NOT NULL
-)""")
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS skin (
+        idSkin INTEGER PRIMARY KEY,    
+        idUser INTEGER UNIQUE,
+        FOREIGN KEY (idUser) REFERENCES usuario(idUser)
+    );""")
+
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS base(
+        idBase INTEGER PRIMARY KEY,
+        r TEXT NOT NULL,
+        g TEXT NOT NULL,
+        b TEXT NOT NULL,
+        idSkin INTEGER UNIQUE,
+        FOREIGN KEY (idSkin) REFERENCES usuario(idSkin)
+    )""")
+
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS borda(
+        idBase INTEGER PRIMARY KEY,
+        r TEXT NOT NULL,
+        g TEXT NOT NULL,
+        b TEXT NOT NULL,
+        idSkin INTEGER UNIQUE,
+        FOREIGN KEY (idSkin) REFERENCES usuario(idSkin)
+    )""")
+
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS sessao(
+        id INTEGER NOT NULL
+    )""")
 
 
 def cadastro(login, senha):
@@ -67,8 +83,19 @@ def cadastro(login, senha):
 
         cursor.execute(f"""
         INSERT INTO skin 
+        VALUES (null, {iduser})
+        """)
+
+        cursor.execute(f"""
+        INSERT INTO base 
         VALUES (null, "255", "255", "255", {iduser})
         """)
+
+        cursor.execute(f"""
+        INSERT INTO borda 
+        VALUES (null, "255", "255", "255", {iduser})
+        """)
+
         conn.commit()
         return f"O login {login} foi cadastrado com sucesso."
 
@@ -129,10 +156,10 @@ def mudarSkin():
         conn.commit()
     
 
-def getCor():
+def getCor(tabela):
     cursor.execute(f"""
-    SELECT r, g, b FROM skin 
-    WHERE idUser = {iduser};
+    SELECT r, g, b FROM {tabela}
+    WHERE idSkin = {iduser};
     """)
 
     resultado = cursor.fetchall()
@@ -192,3 +219,10 @@ def mostrarScores():
 def jogoSair():
     conn.close()
     _exit(0)
+
+root = Tk()
+root.withdraw()
+
+conn = sqlite3.connect("BD")
+cursor = conn.cursor()
+criarTabelas()
