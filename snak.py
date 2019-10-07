@@ -2,7 +2,7 @@ from os import _exit
 from time import sleep
 from threading import Thread as th
 from LoadGame import render, relogio, keyPress, engine, inicio, menu, checkScore
-from User import checkSessao
+from User import checkSessao, jogoSair
 
 if checkSessao() != True:
     inicio()
@@ -36,5 +36,5 @@ while(True):
 
         ## se for sair ele fecha tudo
         elif event.type == engine.QUIT:
-            _exit(0)
+            jogoSair()
             

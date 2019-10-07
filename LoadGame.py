@@ -2,13 +2,13 @@ import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
-from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores, logSessao, delSessao
+from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores, logSessao, delSessao, jogoSair
 
 def event():
     for event in engine.event.get():
         
         if event.type == engine.QUIT:
-            _exit(0)
+            jogoSair()
 
         return event
 
@@ -178,7 +178,7 @@ def menu():
             log = False
             break
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], lambda: _exit(0))
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], lambda: jogoSair())
 
         engine.display.update()
         
@@ -336,36 +336,33 @@ def checkScore():
         upload = False
 
 
+def gameover(score):
+    global upload
+    posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
+    upload = True
+    ## tela de gameover
+    player = engine.draw.rect(tela, corCobra, rectPlayer)
+    comida = engine.draw.rect(tela, vermelho, posComida)
+    engine.draw.rect(tela, vermelho, comida, 3)
+    tela.blit(score, posScore)
+    tela.blit(restart, posRestart)
+    tela.blit(sair, posSair)
+    engine.display.update()
+
+def drawCalda(arr, player):
+    for i in range(0, calda):
+
+        ## desenhar cada parte da calda
+        c = engine.draw.rect(tela, corCobra, arr[len(arr) - delayCalda * (i + 1)])
+        engine.draw.rect(tela, corBorda, c, 3)
+
+        ## checar se o player colidiu com a calda
+        if player.colliderect(c) and i > 9:
+            return True
+
+
 def render():
     global calda, fim
-
-    def gameover():
-        global upload
-        upload = True
-        ## tela de gameover
-        player = engine.draw.rect(tela, corCobra, rectPlayer)
-        comida = engine.draw.rect(tela, vermelho, posComida)
-        engine.draw.rect(tela, vermelho, comida, 3)
-        tela.blit(score, posScore)
-        tela.blit(restart, posRestart)
-        tela.blit(sair, posSair)
-        engine.display.update()
-
-    def drawCalda():
-        for i in range(0, calda):
-
-            ## desenhar cada parte da calda
-            c = engine.draw.rect(tela, corCobra, arr[len(arr) - delayCalda * (i + 1)])
-            engine.draw.rect(tela, corBorda, c, 3)
-
-            ## checar se o player colidiu com a calda
-            if player.colliderect(c) and i > 9:
-                return True
-
-            ## deletar elementos da array
-            ## para ela nao ficar muito grande
-            if len(arr) > calda:
-                arr.pop(0)
 
     ## array que vai ter as posições
     ## passadas do player
@@ -387,12 +384,17 @@ def render():
             ## desenhar a calda
             arr.append(player)
 
+            ## deletar elementos da array
+            ## para ela nao ficar muito grande
+            if len(arr) > calda:
+                arr.pop(0)
+
             ## se uma dessas funçoes retornar true
             ## significa que o player encostou na calda
             ## ou colidiu ocm a parede
-            if drawCalda() or colisaoParede(player):
+            if drawCalda(arr, player) or colisaoParede(player):
                 fim = True
-                gameover()
+                gameover(score)
 
                 while(True):
 
@@ -450,10 +452,10 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w), int(getRes.current_h)]
+resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
 
 ##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao, engine.FULLSCREEN)
+tela = engine.display.set_mode(resolucao)
 
 posCaixa = []
 for i in range(1, 21):

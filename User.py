@@ -1,4 +1,5 @@
 import sqlite3
+from os import _exit
 from tkinter.colorchooser import *
 from tkinter import Tk, colorchooser
 from datetime import datetime
@@ -179,6 +180,7 @@ def uploadScore(score):
     VALUES (null, "{score}", {data}, "{iduser}")
     """)
     conn.commit()
+    print(score)
 
 
 def mostrarScores():
@@ -187,3 +189,6 @@ def mostrarScores():
     ORDER BY score DESC
     """)
     
+def jogoSair():
+    conn.close()
+    _exit(0)
