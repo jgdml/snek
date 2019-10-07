@@ -12,6 +12,29 @@ def event():
 
         return event
 
+def slider(posX, posY, cor, val):
+    if cor == "r":
+        cor = 255, 50, 50
+
+    elif cor == "g":
+        cor = 50, 255, 50
+
+    else:
+        cor = 50, 50, 255
+    branco = 255, 255, 255
+
+    val = engine.font.Font.render(fonte, val, True, branco)
+    rect = [posX, posY, resolucao[0] * 0.2, resolucao[1] * 0.02]
+    rect[0] = posX - rect[2]
+    rect[1] = posY - rect[3]
+
+    
+
+    engine.draw.rect(tela, cor, rect)
+    engine.draw.rect(tela, branco, rect, 2)
+    tela.blit(val, (rect[0], rect[1] - 30))
+
+    return val
 
 def boxMenu(texto, evento, posX, posY, func):
 
@@ -62,10 +85,13 @@ def textInput(posX, posY, txt, evento, txtIn):
     
     return ""
 
-def quebra():
+def resetJogar():
     global reset
     reset = True
     fim = False
+    return True
+
+def quebra():
     return True
 
 def inicio():
@@ -167,12 +193,12 @@ def menu():
         tela.fill(bg)
         evento = event()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[9], quebra):
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[9], resetJogar):
             break
 
         boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[11], mostrarScores)
 
-        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[13], mudarSkin)
+        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[13], mudarCores)
 
         if boxMenu("Logout", evento, resolucao[0] / 2, posCaixa[15], quebra):
             log = False
@@ -193,6 +219,23 @@ def menu():
 def logoutConta():
     inicio()
     menu()
+
+
+def mudarCores():
+    global corCobra, corBorda
+    v = "2"
+    while(True):
+        tela.fill(bg)
+        eventos = event()
+
+        
+
+        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.965, quebra):
+                break
+
+        slider(250, 100, "r", v)
+
+        engine.display.update()
 
 
 def autoRun():
