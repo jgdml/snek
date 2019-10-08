@@ -9,19 +9,32 @@ def slider(posX, posY, cor, val):
 
     else:
         cor = 50, 50, 255
+
     branco = 255, 255, 255
 
     displayVal = engine.font.Font.render(fonte, str(val), True, branco)
-    rect = [posX, posY, resolucao[0] * 0.2, resolucao[1] * 0.02]
+    rect = [posX, posY, resolucao[0] * 0.24, resolucao[1] * 0.05]
     rect[0] = posX - rect[2] / 2
     
 
-    rectPointer = [(posX - rect[0]), posY, rect[2] * 0.046, rect[3]]
-    rectPointer[0] = int(rectPointer[0] * val)
+    rectPointer = [posX - rect[2] / 2, posY, rect[2] * 0.046, rect[3]]
+    posPointer = rect[2] / 255
+    rectPointer[0] += posPointer * val
 
-    engine.draw.rect(tela, cor, rect)
-    engine.draw.rect(tela, branco, rect, 2)
-    tela.blit(displayVal, (rect[0], rect[1] - 30))
+    dentro = engine.draw.rect(tela, cor, rect)
+    borda = engine.draw.rect(tela, branco, rect, 2)
+
+    mPos = engine.mouse.get_pos()
+
+    if dentro.collidepoint(mPos) or borda.collidepoint(mPos):
+        if engine.mouse.get_pressed()[0]:
+            rectPointer[0] = mPos[0] - rectPointer[2] / 2
+            val = int(rectPointer[0] - rect[0])
+
     engine.draw.rect(tela, branco, rectPointer)
+    displayVal = engine.font.Font.render(fonte, str(val), True, branco)
+    tela.blit(displayVal, (posX - displayVal.get_size()[0] / 2, rect[1]* 0.9))
 
-    return val
+
+
+    return val if val > -1 else 0

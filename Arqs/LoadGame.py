@@ -157,7 +157,7 @@ def gameover(score):
     ## tela de gameover
     player = engine.draw.rect(tela, corCobra, rectPlayer)
     comida = engine.draw.rect(tela, vermelho, posComida)
-    engine.draw.rect(tela, vermelho, comida, 3)
+    engine.draw.rect(tela, vermelho, comida, 1)
     tela.blit(score, posScore)
     tela.blit(restart, posRestart)
     tela.blit(sair, posSair)
@@ -367,7 +367,8 @@ def telaOpcoes():
 def telaSkin():
     global corCobra, corBorda
     vals = [corCobra, corBorda]
-    
+    rect = rectPlayer[2] * 2, rectPlayer[3] * 2
+    pos = rectPlayer[0] * 0.5, rectPlayer[1] * 1.5
 
     while(True):
         blitBg()
@@ -376,8 +377,13 @@ def telaSkin():
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
-        slider(resolucao[0] / 2, resolucao[1] / 2, "r", vals[0][0])
+        vals[0][0] = slider(resolucao[0] / 2, resolucao[1] / 2, "r", vals[0][0])
 
+
+        for i in range(0, 15):
+            player = engine.draw.rect(tela, vals[0], (pos[0] + rect[0] * i / 3, pos[1], rect[0], rect[1]))
+            engine.draw.rect(tela, corBorda, player, 3)
+        
         engine.display.update()
 
 

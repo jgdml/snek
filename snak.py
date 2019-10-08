@@ -17,11 +17,6 @@ th(target=render).start()
 
 while(True):
     
-    ## print pra ver o fps
-    ## o end = "\r" serve para 
-    ## ele n printar em outra linha
-    print("\t", int(relogio.get_fps()), end="\r")
-
     checkScore()
 
     ## se tiver eventos acontecendo ele vai pegar o evento
