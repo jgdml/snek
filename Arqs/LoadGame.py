@@ -9,6 +9,12 @@ from Components.TextInput import textInput
 from Defaults import *
 from Arqs.Funcs import *
 
+def blitNome():
+    tela.blit(ultra, (resolucao[0] / 2 - ultra.get_size()[0] / 2, ultra.get_size()[1] / 2))
+
+
+def blitBg():
+    tela.fill(bg)
 
 
 def logoutConta():
@@ -173,8 +179,9 @@ def telaCadastro():
     resultado = ""
     resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
     while(True):
-        tela.fill(bg)
+        blitBg()
         
+        blitNome()
 
         evento = event()
 
@@ -221,7 +228,9 @@ def telaInicial():
     resultado = ""
 
     while(True):
-        tela.fill(bg)
+        blitBg()
+
+        blitNome()
 
         evento = event()
 
@@ -265,8 +274,10 @@ def telaMenu():
     corBorda = getCor("borda")
 
     while(True):
-        tela.fill(bg)
+        blitBg()
         evento = event()
+
+        blitNome()
 
         if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
             break
@@ -293,7 +304,7 @@ def telaScores():
     rectLinha = [resolucao[0] * 0.55, resolucao[1] * 0.01]
 
     while(True):
-        tela.fill(bg)
+        blitBg()
         eventos = event()
 
         tela.blit(titulo, (resolucao[0] / 2 - titulo.get_size()[0] / 2, titulo.get_size()[1] / 2))
@@ -334,7 +345,7 @@ def telaOpcoes():
     log = True
 
     while(True):
-        tela.fill(bg)
+        blitBg()
         eventos = event()
 
         boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
@@ -359,7 +370,7 @@ def telaSkin():
     
 
     while(True):
-        tela.fill(bg)
+        blitBg()
         eventos = event()
 
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
@@ -397,7 +408,7 @@ def render():
     if fim != True:
         while(True):
             ## pintar a tela de preto
-            tela.fill(bg)
+            blitBg()
 
             ## desenhar player
             player = engine.draw.rect(tela, corCobra, rectPlayer)

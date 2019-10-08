@@ -60,6 +60,7 @@ direcao = "nulo"
 ## tipo de fonte e tamanho dela
 fonte = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0265))
 fonteTitulo = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0565))
+ultra = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.1))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)
@@ -72,6 +73,8 @@ sair = fonte.render("ESC = Menu", True, branco)
 
 posSair = (resolucao[0] / 2 - sair.get_size()[0] / 2, posRestart[1] - sair.get_size()[1])
 
+
+ultra = ultra.render("Ultra Snake", True, branco)
 
 ## pra resetar o jogo se o usuario
 ## apertar R
