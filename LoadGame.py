@@ -10,6 +10,154 @@ from Arqs.Funcs import *
 
 
 
+def logoutConta():
+    delSessao()
+    telaInicial()
+    telaMenu()
+
+
+def autoRun():
+    ## a direçao eh global pra agnt poder mudar ela fora da funçao
+    global direcao
+
+    if direcao == "x+":
+        rectPlayer[0] += vel
+
+    elif direcao == "x-":
+        rectPlayer[0] -= vel
+
+    elif direcao == "y+":
+        rectPlayer[1] += vel
+
+    elif direcao == "y-":
+        rectPlayer[1] -= vel
+
+
+
+def novaComida():
+    global posComida
+    posComida = [randint(tamComida[0], resolucao[0] - tamComida[0]), randint(tamComida[1], resolucao[1] - tamComida[1]), tamComida[0], tamComida[1]]
+
+
+
+def colisaoComida(obj1, obj2):
+    global vel, calda
+
+    if obj1.colliderect(obj2):
+        calda += 1
+        vel += resolucao[1] * 0.0001
+        novaComida()
+
+
+
+def paredeTeleporte():
+    global rectPlayer
+    ## esses ifs sao para teleportar o player
+    ## quando ele toca a parede
+    if rectPlayer[0] > resolucao[0] + 1:
+        rectPlayer[0] = 1
+
+    if rectPlayer[0] < 1:
+        rectPlayer[0] = resolucao[0]
+
+    if rectPlayer[1] > resolucao[1] + 1:
+        rectPlayer[1] = 1
+
+    if rectPlayer[1] < 1:
+        rectPlayer[1] = resolucao[1]
+
+    return False
+
+
+
+def keyPress(tecla):
+    global reset
+
+    if tecla == engine.K_r and fim:
+        reset = True
+
+    elif tecla == engine.K_ESCAPE and fim:
+        return "esc"
+
+    else:
+        movimentos(tecla)
+
+
+
+def movimentos(tecla):
+    global direcao
+
+    ## se ele nao estiver andando na horizontal
+    ## troque a posiçao horizontal
+
+    if direcao[0] != "x":
+        if tecla == engine.K_RIGHT:
+            direcao = "x+"
+        elif tecla == engine.K_LEFT:
+            direcao = "x-"
+
+    ## se ele nao estiver andando na vertical
+    ## troque a posiçao vertical
+    if direcao[0] != "y":
+        if tecla == engine.K_UP:
+            direcao = "y-"
+        elif tecla == engine.K_DOWN:
+            direcao = "y+"
+
+
+
+def bot():
+    global direcao
+
+    if rectPlayer[0] > posComida[0]:
+        direcao = "x-"
+
+        if rectPlayer[1] > posComida[1]:
+            direcao = "y-"
+
+    else:
+        direcao = "x+"
+
+        if rectPlayer[1] < posComida[1]:
+            direcao = "y+"
+
+
+
+def resetAll():
+    global rectPlayer, fim, reset, direcao, vel
+
+    fim = False
+    reset = False
+    direcao = "nulo"
+    vel = tam[0] * 0.2
+    rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
+    novaComida()
+
+
+
+def checkScore():
+    global upload
+    if upload:
+        uploadScore((calda - tamInicial) * 450)
+        upload = False
+
+
+
+def gameover(score):
+    global upload
+    posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
+    upload = True
+    ## tela de gameover
+    player = engine.draw.rect(tela, corCobra, rectPlayer)
+    comida = engine.draw.rect(tela, vermelho, posComida)
+    engine.draw.rect(tela, vermelho, comida, 3)
+    tela.blit(score, posScore)
+    tela.blit(restart, posRestart)
+    tela.blit(sair, posSair)
+    engine.display.update()
+
+
+
 def resetJogar():
     global reset
     reset = True
@@ -17,54 +165,55 @@ def resetJogar():
     return True
 
 
-def cadastroTela():
-        loginTxt = ""
-        senhaTxt = ""
-        resultado = ""
-        resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
-        while(True):
-            tela.fill(bg)
-            
 
-            evento = event()
-
-            retLogin = textInput(resolucao[0] / 2, posCaixa[10], "Login", evento, loginTxt)
-
-            if retLogin == engine.K_BACKSPACE:
-                loginTxt = loginTxt[0: len(loginTxt) - 1]
-            else:
-                loginTxt += retLogin
-
-
-            retSenha = textInput(resolucao[0] / 2, posCaixa[13], "Senha", evento, "*" * len(senhaTxt))
-
-            if retSenha == engine.K_BACKSPACE:
-                senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
-                
-            else:
-                senhaTxt += retSenha
-
+def telaCadastro():
+    loginTxt = ""
+    senhaTxt = ""
+    resultado = ""
+    resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
+    while(True):
+        tela.fill(bg)
         
-            ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[17], lambda: cadastro(loginTxt, senhaTxt))
-            if ret != None:
-                resultado = ret
-            
-            
-            if ret != None and ret[0] == "O":
-                resRender = engine.font.Font.render(fonte, resultado, True, verde)
-            elif ret != None:  
-                resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
 
-            resRenderS = resRender.get_size()
-            tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
+        evento = event()
+
+        retLogin = textInput(resolucao[0] / 2, posCaixa[10], "Login", evento, loginTxt)
+
+        if retLogin == engine.K_BACKSPACE:
+            loginTxt = loginTxt[0: len(loginTxt) - 1]
+        else:
+            loginTxt += retLogin
+
+
+        retSenha = textInput(resolucao[0] / 2, posCaixa[13], "Senha", evento, "*" * len(senhaTxt))
+
+        if retSenha == engine.K_BACKSPACE:
+            senhaTxt = senhaTxt[0: len(senhaTxt) - 1]
+            
+        else:
+            senhaTxt += retSenha
+
+    
+        ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[17], lambda: cadastro(loginTxt, senhaTxt))
+        if ret != None:
+            resultado = ret
         
-            if boxMenu("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.952, quebra):
-                break
+        
+        if ret != None and ret[0] == "O":
+            resRender = engine.font.Font.render(fonte, resultado, True, verde)
+        elif ret != None:  
+            resRender = engine.font.Font.render(fonte, resultado, True, vermelho)
 
-            engine.display.update()
+        resRenderS = resRender.get_size()
+        tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
+    
+        if boxMenu("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+            break
+
+        engine.display.update()
 
 
-def inicio():
+def telaInicial():
 
     loginTxt = ""
     senhaTxt = ""
@@ -103,13 +252,13 @@ def inicio():
         resRenderS = resRender.get_size()
         tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
 
-        boxMenu("Cadastrar-se", evento, resolucao[0] * 0.178, resolucao[1] * 0.952, cadastroTela)
+        boxMenu("Cadastrar-se", evento, resolucao[0] * 0.146, resolucao[1] * 0.962, telaCadastro)
 
         engine.display.update()
         
     
 
-def menu():
+def telaMenu():
     global corCobra, corBorda    
     corCobra = getCor("base")
     corBorda = getCor("borda")
@@ -121,16 +270,15 @@ def menu():
         if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
             break
 
-        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[13], opcoes)
+        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[13], telaOpcoes)
 
         boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[16], jogoSair)
 
         engine.display.update()
-        
+
     
     
-    
-def opcoes():
+def telaOpcoes():
     log = True
 
     while(True):
@@ -139,7 +287,7 @@ def opcoes():
 
         boxMenu("Highscores", eventos, resolucao[0] / 2, posCaixa[11], telaScores)
 
-        boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], mudarCores)
+        boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
         if boxMenu("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
             log = False
@@ -155,12 +303,9 @@ def opcoes():
 
 
 
-
 def telaScores():
 
     topScores = mostrarScores()
-
-
 
     while(True):
         tela.fill(bg)
@@ -172,7 +317,8 @@ def telaScores():
         engine.display.update()
 
 
-def mudarCores():
+
+def telaSkin():
     global corCobra, corBorda
     vals = [corCobra, corBorda]
     
@@ -181,8 +327,6 @@ def mudarCores():
         tela.fill(bg)
         eventos = event()
 
-        
-
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
@@ -190,165 +334,7 @@ def mudarCores():
 
         engine.display.update()
 
-def logoutConta():
-    delSessao()
-    inicio()
-    menu()
 
-
-def autoRun():
-    ## a direçao eh global pra agnt poder mudar ela fora da funçao
-    global direcao
-
-    if direcao == "x+":
-        rectPlayer[0] += vel
-
-    elif direcao == "x-":
-        rectPlayer[0] -= vel
-
-    elif direcao == "y+":
-        rectPlayer[1] += vel
-
-    elif direcao == "y-":
-        rectPlayer[1] -= vel
-
-
-def novaComida():
-    global posComida
-    posComida = [randint(tamComida[0], resolucao[0] - tamComida[0]), randint(tamComida[1], resolucao[1] - tamComida[1]), tamComida[0], tamComida[1]]
-
-
-def colisaoComida(obj1, obj2):
-    global vel, calda
-
-    if obj1.colliderect(obj2):
-        calda += 1
-        vel += resolucao[1] * 0.0001
-        novaComida()
-
-
-def paredeTeleporte():
-    global rectPlayer
-    ## esses ifs sao para teleportar o player
-    ## quando ele toca a parede
-    if rectPlayer[0] > resolucao[0] + 1:
-        rectPlayer[0] = 1
-
-    if rectPlayer[0] < 1:
-        rectPlayer[0] = resolucao[0]
-
-    if rectPlayer[1] > resolucao[1] + 1:
-        rectPlayer[1] = 1
-
-    if rectPlayer[1] < 1:
-        rectPlayer[1] = resolucao[1]
-
-    return False
-
-
-def paredeMorte(rect):
-    val = False
-
-    ## esses sao para finalizar o jogo quando
-    ## o player toca a parede
-    if rect[0] > resolucao[0] - rect[2] or rect[0] < 1:
-        val = True
-
-    if rect[1] > resolucao[1] - rect[3] or rect[1] < 1:
-        val = True
-
-    return val
-
-
-def colisaoParede(rect):
-
-    ## morrer quando tocar a parede
-    return paredeMorte(rect)
-
-    ## teleporte quando tocar a parede
-    # return paredeTeleporte()
-
-
-def keyPress(tecla):
-    global reset
-
-    if tecla == engine.K_r and fim:
-        reset = True
-
-    elif tecla == engine.K_ESCAPE and fim:
-        return "esc"
-
-    else:
-        movimentos(tecla)
-
-
-def movimentos(tecla):
-    global direcao
-
-    ## se ele nao estiver andando na horizontal
-    ## troque a posiçao horizontal
-
-    if direcao[0] != "x":
-        if tecla == engine.K_RIGHT:
-            direcao = "x+"
-        elif tecla == engine.K_LEFT:
-            direcao = "x-"
-
-    ## se ele nao estiver andando na vertical
-    ## troque a posiçao vertical
-    if direcao[0] != "y":
-        if tecla == engine.K_UP:
-            direcao = "y-"
-        elif tecla == engine.K_DOWN:
-            direcao = "y+"
-
-
-def bot():
-    global direcao
-
-    if rectPlayer[0] > posComida[0]:
-        direcao = "x-"
-
-        if rectPlayer[1] > posComida[1]:
-            direcao = "y-"
-
-    else:
-        direcao = "x+"
-
-        if rectPlayer[1] < posComida[1]:
-            direcao = "y+"
-
-
-def resetAll():
-    global rectPlayer, fim, reset, direcao, vel
-
-    fim = False
-    reset = False
-    direcao = "nulo"
-    vel = tam[0] * 0.2
-    rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
-    novaComida()
-
-
-def checkScore():
-    global upload
-    if upload:
-        uploadScore((calda - tamInicial) * 450)
-        upload = False
-
-
-def gameover(score):
-    global upload
-    posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
-    upload = True
-    ## tela de gameover
-    player = engine.draw.rect(tela, corCobra, rectPlayer)
-    comida = engine.draw.rect(tela, vermelho, posComida)
-    engine.draw.rect(tela, vermelho, comida, 3)
-    tela.blit(score, posScore)
-    tela.blit(restart, posRestart)
-    tela.blit(sair, posSair)
-    engine.display.update()
 
 def drawCalda(arr, player):
     for i in range(0, calda):
@@ -360,6 +346,7 @@ def drawCalda(arr, player):
         ## checar se o player colidiu com a calda
         if player.colliderect(c) and i > 9:
             return True
+
 
 
 def render():
