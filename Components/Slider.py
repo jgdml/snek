@@ -1,4 +1,4 @@
-from Arqs.Defaults import *
+from Defaults import *
 
 def slider(posX, posY, cor, val):
     if cor == "r":

@@ -1,5 +1,5 @@
-from Arqs.Defaults import engine, resolucao
-from User import jogoSair
+from Defaults import engine, resolucao
+from Arqs.User import jogoSair
 
 
 def event():

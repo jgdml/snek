@@ -1,4 +1,4 @@
-from Arqs.Defaults import *
+from Defaults import *
 
 def boxMenu(texto, evento, posX, posY, func):
 

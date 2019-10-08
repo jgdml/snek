@@ -1,11 +1,12 @@
 from os import _exit
 from random import randint
 from time import sleep
-from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores, logSessao, delSessao, jogoSair
+
+from Arqs.User import *
 from Components.BoxMenu import boxMenu
 from Components.Slider import slider
 from Components.TextInput import textInput
-from Arqs.Defaults import *
+from Defaults import *
 from Arqs.Funcs import *
 
 

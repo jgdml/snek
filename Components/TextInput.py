@@ -1,4 +1,4 @@
-from Arqs.Defaults import *
+from Defaults import *
 
 def textInput(posX, posY, txt, evento, txtIn):
     txt = engine.font.Font.render(fonte, txt, True, branco)

@@ -1,13 +1,15 @@
 from os import _exit
 from time import sleep
 from threading import Thread as th
-from LoadGame import render, relogio, keyPress, engine, inicio, menu, checkScore
-from User import checkSessao, jogoSair
+from Arqs.LoadGame import render, relogio, keyPress, engine, telaInicial, telaMenu, checkScore
+from Arqs.User import checkSessao, jogoSair
 
 if checkSessao() != True:
-    inicio()
+    telaInicial()
 
-menu()
+telaMenu()
+
+## pegar o diretorio do arquivo
 
 ## iniciando a funçao render numa thread separada pra n ficar td junto
 th(target=render).start()
@@ -31,7 +33,7 @@ while(True):
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
             if keyPress(event.key) == "esc":
-                menu()
+                telaMenu()
     
 
         ## se for sair ele fecha tudo

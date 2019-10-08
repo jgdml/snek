@@ -1,4 +1,5 @@
 import pygame as engine
+from os import path
 
 ## inicia tudo do pygame
 engine.init()
