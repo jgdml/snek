@@ -212,9 +212,24 @@ def uploadScore(score):
 
 def mostrarScores():
     cursor.execute(f"""
-    SELECT score, data FROM highscores 
-    ORDER BY score DESC
+    SELECT MAX(idUser) FROM usuario
     """)
+
+    topScores = []
+
+    for i in range(1, cursor.fetchall()[0][0] + 1):
+        cursor.execute(f"""
+        SELECT usuario.login, MAX(highscores.score) FROM highscores
+        INNER JOIN usuario
+        ON usuario.idUser = highscores.idUser
+        WHERE highscores.idUser = {i}""")
+
+        topScores.append(cursor.fetchall()[0])
+    
+    topScores.sort()
+
+    return topScores
+    
     
 def jogoSair():
     conn.close()

@@ -1,91 +1,14 @@
-import pygame as engine
 from os import _exit
 from random import randint
 from time import sleep
 from User import login, getCor, cadastro, mudarSkin, uploadScore, mostrarScores, logSessao, delSessao, jogoSair
-
-def event():
-    for event in engine.event.get():
-        
-        if event.type == engine.QUIT:
-            jogoSair()
-
-        return event
-
-def slider(posX, posY, cor, val):
-    if cor == "r":
-        cor = 255, 50, 50
-
-    elif cor == "g":
-        cor = 50, 255, 50
-
-    else:
-        cor = 50, 50, 255
-    branco = 255, 255, 255
-
-    displayVal = engine.font.Font.render(fonte, str(val), True, branco)
-    rect = [posX, posY, resolucao[0] * 0.2, resolucao[1] * 0.02]
-    rect[0] = posX - rect[2] / 2
-    
-
-    rectPointer = [(posX - rect[0]), posY, rect[2] * 0.046, rect[3]]
-    rectPointer[0] = int(rectPointer[0] * val)
-
-    engine.draw.rect(tela, cor, rect)
-    engine.draw.rect(tela, branco, rect, 2)
-    tela.blit(displayVal, (rect[0], rect[1] - 30))
-    engine.draw.rect(tela, branco, rectPointer)
-
-    return val
-
-def boxMenu(texto, evento, posX, posY, func):
-
-    txtSize = fonte.size(texto)
-    txt = engine.font.Font.render(fonte, texto, True, branco)
-
-    rectTam = txtSize[0] + resolucao[0] * 0.1, txtSize[1] + resolucao[1] * 0.027
-
-    caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
-
-    caixa = engine.draw.rect(tela, branco, caixa, 2)
-    
-
-    if caixa.collidepoint(engine.mouse.get_pos()):
-        caixa = engine.draw.rect(tela, branco, caixa)
-        txt = engine.font.Font.render(fonte, texto, True, bg)
-        if evento != None and evento.type == engine.MOUSEBUTTONDOWN:
-            return func()
-    
-    tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] / 2))
+from Components.BoxMenu import boxMenu
+from Components.Slider import slider
+from Components.TextInput import textInput
+from Arqs.Defaults import *
+from Arqs.Funcs import *
 
 
-
-def textInput(posX, posY, txt, evento, txtIn):
-    txt = engine.font.Font.render(fonte, txt, True, branco)
-    txtSize = txt.get_size()
-
-    txtInShow = engine.font.Font.render(fonte, txtIn + "|", True, branco)
-    txtInSize = txtInShow.get_size()
-
-    rectTam = [resolucao[0] * 0.2, resolucao[1] * 0.06]
-    if txtInSize[0] > rectTam[0]:
-        rectTam[0] = txtInSize[0]
-
-    tela.blit(txt, (posX - txtSize[0] / 2, posY - txtSize[1] * 2))
-
-    caixa = [posX - rectTam[0] // 2, posY - rectTam[1] // 2, rectTam[0], rectTam[1]]
-    caixa = engine.draw.rect(tela, branco, caixa, 2)
-
-    if caixa.collidepoint(engine.mouse.get_pos()):
-        txtInShow = engine.font.Font.render(fonte, (txtIn + "|"), True, bg)
-        caixa = engine.draw.rect(tela, branco, caixa)
-        
-        if evento != None and evento.type == engine.KEYDOWN:
-            return evento.key if evento.key == engine.K_BACKSPACE else evento.unicode
-
-    tela.blit(txtInShow, (posX - txtInSize[0] / 2, posY - txtInSize[1] / 2))
-    
-    return ""
 
 def resetJogar():
     global reset
@@ -93,11 +16,8 @@ def resetJogar():
     fim = False
     return True
 
-def quebra():
-    return True
 
-def inicio():
-    def cadastroTela():
+def cadastroTela():
         loginTxt = ""
         senhaTxt = ""
         resultado = ""
@@ -144,6 +64,8 @@ def inicio():
             engine.display.update()
 
 
+def inicio():
+
     loginTxt = ""
     senhaTxt = ""
     resultado = ""
@@ -188,8 +110,7 @@ def inicio():
     
 
 def menu():
-    global corCobra, corBorda
-    log = True
+    global corCobra, corBorda    
     corCobra = getCor("base")
     corBorda = getCor("borda")
 
@@ -197,34 +118,59 @@ def menu():
         tela.fill(bg)
         evento = event()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[9], resetJogar):
+        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
             break
 
-        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[11], mostrarScores)
+        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[13], opcoes)
 
-        boxMenu("Skin", evento, resolucao[0] / 2, posCaixa[13], mudarCores)
-
-        if boxMenu("Logout", evento, resolucao[0] / 2, posCaixa[15], quebra):
-            log = False
-            break
-
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], lambda: jogoSair())
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[16], jogoSair)
 
         engine.display.update()
         
     
-    if log != True:
-        delSessao()
-        logoutConta()
     
+    
+def opcoes():
+    log = True
+
+    while(True):
+        tela.fill(bg)
+        eventos = event()
+
+        boxMenu("Highscores", eventos, resolucao[0] / 2, posCaixa[11], telaScores)
+
+        boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], mudarCores)
+
+        if boxMenu("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
+            log = False
+            break
+        
+        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+            break
+
+        engine.display.update()
+
+    if log != True:
+        logoutConta()
 
 
-def logoutConta():
-    inicio()
-    menu()
 
-def string(v):
-    return str(v)
+
+def telaScores():
+
+    topScores = mostrarScores()
+
+
+
+    while(True):
+        tela.fill(bg)
+        eventos = event()
+
+
+        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+            break
+        engine.display.update()
+
 
 def mudarCores():
     global corCobra, corBorda
@@ -237,12 +183,17 @@ def mudarCores():
 
         
 
-        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.965, quebra):
+        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
         slider(resolucao[0] / 2, resolucao[1] / 2, "r", vals[0][0])
 
         engine.display.update()
+
+def logoutConta():
+    delSessao()
+    inicio()
+    menu()
 
 
 def autoRun():
@@ -491,80 +442,6 @@ def render():
             ## esse relogio.tick substitui o sleep
             ## o parametro dele é o máximo de fps que o jogo vai rodar
             relogio.tick_busy_loop(limiteFps)
-
-
-## inicia tudo do pygame
-engine.init()
-
-engine.display.set_caption("Snek")
-
-## pega informaçao do display
-getRes = engine.display.Info()
-
-## guarda a res do display numa array
-resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
-
-##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao)
-
-posCaixa = []
-for i in range(1, 21):
-    posCaixa.append((resolucao[1] / 20) * i)
-
-## definindo relogio como uma variável para ficar mais fácil
-relogio = engine.time.Clock()
-
-limiteFps = 200
-
-## define o tamanho da cobra de acordo com o display
-## nesse caso o tamanho eh 2% do tamanho do display
-tam = [int(resolucao[0] * 0.02)] * 2
-
-tamComida = tam
-
-## [0, 1] sao as posiçoes da cobra e [2, 3] eh o tamanho
-rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] // 2, tam[0], tam[1]]
-
-## calcula a velocidade da cobra com base no tamanho do player
-## vel eh 20% do tamanho
-vel = tam[0] * 0.15
-
-# o delay q a calda vai ter
-# para pegar a posicao do player
-delayCalda = 1
-tamInicial = 10
-
-bg = 10, 10, 10
-branco = 255, 255, 255
-vermelho = 255, 100, 100
-verde = 50, 255, 50
-
-## a variavel q vai definir pra onde a cobra vai se mexer
-direcao = "nulo"
-
-## tipo de fonte e tamanho dela
-fonte = engine.font.Font("font\\Font2.otf", int(resolucao[0] * 0.0265))
-
-## fazer um texto predefinido para renderizar depois
-restart = fonte.render("R = Reset", True, branco)
-
-## posição do texto de restart
-posRestart = (resolucao[0] / 2) - restart.get_size()[0] / 2, resolucao[1] - restart.get_size()[1]
-
-
-sair = fonte.render("ESC = Menu", True, branco)
-
-posSair = (resolucao[0] / 2 - sair.get_size()[0] / 2, posRestart[1] - sair.get_size()[1])
-
-
-## pra resetar o jogo se o usuario
-## apertar R
-reset = False
-
-## pra informar que o jogo acabou
-fim = False
-
-upload = False
 
 
 novaComida()
