@@ -25,9 +25,7 @@ while(True):
     checkScore()
 
     ## se tiver eventos acontecendo ele vai pegar o evento
-    eventos = event()
-
-    if eventos != None:
+    for eventos in engine.event.get():
     
         ## ai ele vai ver a categoria/tipo do evento
         if eventos.type == engine.KEYDOWN:
@@ -37,5 +35,4 @@ while(True):
             ## q o cara aperto
             if keyPress(eventos.key) == "esc":
                 telaMenu()
-    
             

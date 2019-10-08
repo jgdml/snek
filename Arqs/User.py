@@ -224,10 +224,19 @@ def mostrarScores():
             
             if score[2] != iduser:
                 score = score[0], score[1]
+
             topScores.append(score)
     
+    
+    for y in range(0, len(topScores)):
+        for i in range(0, len(topScores)-1):
 
-    return sorted(topScores, reverse=True)
+            if topScores[i][1] < topScores[i+1][1]:
+                troca = topScores[i]
+                topScores[i] = topScores[i+1]
+                topScores[i+1] = troca
+
+    return topScores
     
     
 def jogoSair():
