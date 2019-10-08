@@ -3,6 +3,7 @@ from time import sleep
 from threading import Thread as th
 from Arqs.LoadGame import render, relogio, keyPress, engine, telaInicial, telaMenu, checkScore
 from Arqs.User import checkSessao, jogoSair
+from Arqs.Funcs import event
 
 if checkSessao() != True:
     telaInicial()
@@ -24,19 +25,17 @@ while(True):
     checkScore()
 
     ## se tiver eventos acontecendo ele vai pegar o evento
-    for event in engine.event.get():
+    eventos = event()
 
+    if eventos != None:
+    
         ## ai ele vai ver a categoria/tipo do evento
-        if event.type == engine.KEYDOWN:
+        if eventos.type == engine.KEYDOWN:
             
             ## quando o evento é tecla pressionada
             ## ele manda a tecla pra uma funçao q vai ver qual tecla
             ## q o cara aperto
-            if keyPress(event.key) == "esc":
+            if keyPress(eventos.key) == "esc":
                 telaMenu()
     
-
-        ## se for sair ele fecha tudo
-        elif event.type == engine.QUIT:
-            jogoSair()
             

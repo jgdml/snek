@@ -1,6 +1,9 @@
 import pygame as engine
 from os import path
 
+## pegar o diretorio do arquivo
+root = path.dirname(path.abspath(__file__)) + "\\"
+
 ## inicia tudo do pygame
 engine.init()
 
@@ -45,13 +48,18 @@ tamInicial = 10
 bg = 10, 10, 10
 branco = 255, 255, 255
 vermelho = 255, 100, 100
-verde = 50, 255, 50
+verde = 0, 255, 102
+verde2 = 92, 255, 158
+verde3 = 149, 255, 192
+verde4 = 205, 255, 226
+azul = 127, 178, 255
 
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.Font("Font\\Font2.otf", int(resolucao[0] * 0.0265))
+fonte = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0265))
+fonteTitulo = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0565))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)

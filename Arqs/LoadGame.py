@@ -271,22 +271,71 @@ def telaMenu():
         if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
             break
 
-        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[13], telaOpcoes)
+        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[13], telaScores)
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[16], jogoSair)
+        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[15], telaOpcoes)
+
+        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], jogoSair)
 
         engine.display.update()
 
     
     
+def telaScores():
+
+    topScores = mostrarScores()
+    renderScores = []
+    titulo = engine.font.Font.render(fonteTitulo, "Highscores", True, branco)
+
+    for i in range(0, len(topScores)):
+        renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco)])
+    
+    rectLinha = [resolucao[0] * 0.55, resolucao[1] * 0.01]
+
+    while(True):
+        tela.fill(bg)
+        eventos = event()
+
+        tela.blit(titulo, (resolucao[0] / 2 - titulo.get_size()[0] / 2, titulo.get_size()[1] / 2))
+
+
+        for i in range(0, len(renderScores)):
+
+            if i == 0:
+                corLinha = verde
+                
+            elif i == 1:
+                corLinha = verde2
+
+            elif i == 2:
+                corLinha = verde3
+
+            else:
+                corLinha = verde4
+
+            if len(topScores[i]) > 2:
+                corLinha = azul
+            
+            size = [renderScores[i][0].get_size()[0], renderScores[i][1].get_size()[0]]
+
+            tela.blit(renderScores[i][0], (resolucao[0] / 2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]))
+            tela.blit(renderScores[i][1], (resolucao[0] / 2 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]))
+            engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - 10, rectLinha[0], rectLinha[1]))
+            
+
+        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+            break
+
+        engine.display.update()
+
+
+
 def telaOpcoes():
     log = True
 
     while(True):
         tela.fill(bg)
         eventos = event()
-
-        boxMenu("Highscores", eventos, resolucao[0] / 2, posCaixa[11], telaScores)
 
         boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
@@ -301,21 +350,6 @@ def telaOpcoes():
 
     if log != True:
         logoutConta()
-
-
-
-def telaScores():
-
-    topScores = mostrarScores()
-
-    while(True):
-        tela.fill(bg)
-        eventos = event()
-
-
-        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
-            break
-        engine.display.update()
 
 
 

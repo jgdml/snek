@@ -1,7 +1,5 @@
 import sqlite3
 from os import _exit
-from tkinter.colorchooser import *
-from tkinter import Tk, colorchooser
 from datetime import datetime
 
 def criarTabelas():
@@ -140,18 +138,17 @@ def login(login, senha):
         return "Este login não existe, digite outro"
 
 
-def mudarSkin():
-    res = colorchooser.askcolor()
-
+def mudarSkin(res, local):
+    
     if res[0] != None:
         rgb = []
         for i in range(0, len(res[0])):
             rgb.append(int(res[0][i]))
 
         cursor.execute(f"""
-        UPDATE skin 
+        UPDATE {local} 
         SET r = "{rgb[0]}", g = "{rgb[1]}", b = "{rgb[2]}"
-        WHERE idUser = {iduser}
+        WHERE idSkin = {iduser}
         """)
         conn.commit()
     
@@ -207,7 +204,6 @@ def uploadScore(score):
     VALUES (null, "{score}", {data}, "{iduser}")
     """)
     conn.commit()
-    print(score)
 
 
 def mostrarScores():
@@ -219,24 +215,25 @@ def mostrarScores():
 
     for i in range(1, cursor.fetchall()[0][0] + 1):
         cursor.execute(f"""
-        SELECT usuario.login, MAX(highscores.score) FROM highscores
+        SELECT usuario.login, MAX(highscores.score), highscores.idUser FROM highscores
         INNER JOIN usuario
         ON usuario.idUser = highscores.idUser
         WHERE highscores.idUser = {i}""")
-
-        topScores.append(cursor.fetchall()[0])
+        score = cursor.fetchall()[0]
+        if score[0] and score[1]:
+            
+            if score[2] != iduser:
+                score = score[0], score[1]
+            topScores.append(score)
     
-    topScores.sort()
 
-    return topScores
+    return sorted(topScores, reverse=True)
     
     
 def jogoSair():
     conn.close()
     _exit(0)
 
-root = Tk()
-root.withdraw()
 
 conn = sqlite3.connect("BD")
 cursor = conn.cursor()
