@@ -13,10 +13,10 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w), int(getRes.current_h)]
+resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
 
 ##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao, engine.FULLSCREEN)
+tela = engine.display.set_mode(resolucao)
 
 posCaixa = []
 for i in range(1, 21):

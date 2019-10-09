@@ -1,6 +1,7 @@
 import sqlite3
 from os import _exit
 from datetime import datetime
+from Defaults import root
 
 def criarTabelas():
 
@@ -246,6 +247,6 @@ def jogoSair():
     _exit(0)
 
 
-conn = sqlite3.connect("BD")
+conn = sqlite3.connect(root+"banco")
 cursor = conn.cursor()
 criarTabelas()
