@@ -138,19 +138,21 @@ def login(login, senha):
         return "Este login não existe, digite outro"
 
 
-def mudarSkin(res, local):
+def mudarSkin(base, borda):
     
-    if res[0] != None:
-        rgb = []
-        for i in range(0, len(res[0])):
-            rgb.append(int(res[0][i]))
+    cursor.execute(f"""
+    UPDATE base
+    SET r = "{base[0]}", g = "{base[1]}", b = "{base[2]}"
+    WHERE idSkin = {iduser}
+    """)
+    conn.commit()
 
-        cursor.execute(f"""
-        UPDATE {local} 
-        SET r = "{rgb[0]}", g = "{rgb[1]}", b = "{rgb[2]}"
-        WHERE idSkin = {iduser}
-        """)
-        conn.commit()
+    cursor.execute(f"""
+    UPDATE borda
+    SET r = "{borda[0]}", g = "{borda[1]}", b = "{borda[2]}"
+    WHERE idSkin = {iduser}
+    """)
+    conn.commit()
     
 
 def getCor(tabela):

@@ -9,8 +9,14 @@ from Components.TextInput import textInput
 from Defaults import *
 from Arqs.Funcs import *
 
+
 def blitNome():
     tela.blit(ultra, (resolucao[0] / 2 - ultra.get_size()[0] / 2, ultra.get_size()[1] / 2))
+
+
+def titulo(txt):
+    titulo = engine.font.Font.render(fonteTitulo, txt, True, branco)
+    tela.blit(titulo, (resolucao[0] / 2 - titulo.get_size()[0] / 2, titulo.get_size()[1] / 2))
 
 
 def blitBg():
@@ -296,7 +302,6 @@ def telaScores():
 
     topScores = mostrarScores()
     renderScores = []
-    titulo = engine.font.Font.render(fonteTitulo, "Highscores", True, branco)
 
     for i in range(0, len(topScores)):
         renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco)])
@@ -307,8 +312,7 @@ def telaScores():
         blitBg()
         eventos = event()
 
-        tela.blit(titulo, (resolucao[0] / 2 - titulo.get_size()[0] / 2, titulo.get_size()[1] / 2))
-
+        titulo("Highscores")
 
         for i in range(0, len(renderScores)):
 
@@ -348,6 +352,8 @@ def telaOpcoes():
         blitBg()
         eventos = event()
 
+        titulo("Opções")
+
         boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
         if boxMenu("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
@@ -365,28 +371,49 @@ def telaOpcoes():
 
 
 def telaSkin():
-    global corCobra, corBorda
-    vals = [corCobra, corBorda]
+    cores = [corCobra, corBorda]
     rect = rectPlayer[2] * 2, rectPlayer[3] * 2
-    pos = rectPlayer[0] * 0.5, rectPlayer[1] * 1.5
+    pos = resolucao[0] / 2.3, posCaixa[12]
+    base = fonte.render("Base", True, branco)
+    borda = fonte.render("Borda", True, branco)
 
     while(True):
         blitBg()
         eventos = event()
 
+        titulo("Skin")
+
+        tela.blit(base, (resolucao[0] / 4 - base.get_size()[0] / 2, posCaixa[3]))
+
+        tela.blit(borda, (resolucao[0] / 1.3 - borda.get_size()[0] / 2, posCaixa[3]))
+
+        cores[0][0] = slider(resolucao[0] / 4, posCaixa[6], "r", cores[0][0])
+
+        cores[0][1] = slider(resolucao[0] / 4, posCaixa[8], "g", cores[0][1])
+
+        cores[0][2] = slider(resolucao[0] / 4, posCaixa[10], "b", cores[0][2])
+
+        cores[1][0] = slider(resolucao[0] / 1.3, posCaixa[6], "r", cores[1][0])
+
+        cores[1][1] = slider(resolucao[0] / 1.3, posCaixa[8], "g", cores[1][1])
+
+        cores[1][2] = slider(resolucao[0] / 1.3, posCaixa[10], "b", cores[1][2])
+
+
+        drawSkin(rect, pos, cores)
+
+        boxMenu("Aplicar", eventos, resolucao[0] / 2, posCaixa[16], lambda: mudarSkin(cores[0], cores[1]))
+
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
-        vals[0][0] = slider(resolucao[0] / 2, resolucao[1] / 2, "r", vals[0][0])
 
-
-        for i in range(0, 15):
-            player = engine.draw.rect(tela, vals[0], (pos[0] + rect[0] * i / 3, pos[1], rect[0], rect[1]))
-            engine.draw.rect(tela, corBorda, player, 3)
-        
         engine.display.update()
 
-
+def drawSkin(rect, pos, cores):
+    for i in range(0, 15):
+        player = engine.draw.rect(tela, cores[0], (pos[0] + rect[0] * i / 6, pos[1], rect[0], rect[1]))
+        engine.draw.rect(tela, cores[1], player, 3)
 
 def drawCalda(arr, player):
     for i in range(0, calda):
