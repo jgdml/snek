@@ -13,10 +13,10 @@ engine.display.set_caption("Snek")
 getRes = engine.display.Info()
 
 ## guarda a res do display numa array
-resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
+resolucao = [int(getRes.current_w), int(getRes.current_h)]
 
 ##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao)
+tela = engine.display.set_mode(resolucao, engine.FULLSCREEN)
 
 posCaixa = []
 for i in range(1, 21):
@@ -38,7 +38,7 @@ rectPlayer = [(resolucao[0] // 2) - tam[0] // 2, (resolucao[1] // 2) - tam[1] //
 
 ## calcula a velocidade da cobra com base no tamanho do player
 ## vel eh 20% do tamanho
-vel = tam[0] * 0.15
+vel = tam[0] * 0.2
 
 # o delay q a calda vai ter
 # para pegar a posicao do player

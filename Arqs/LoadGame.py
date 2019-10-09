@@ -162,8 +162,9 @@ def gameover(score):
     upload = True
     ## tela de gameover
     player = engine.draw.rect(tela, corCobra, rectPlayer)
-    comida = engine.draw.rect(tela, vermelho, posComida)
-    engine.draw.rect(tela, vermelho, comida, 1)
+    player = engine.draw.rect(tela, corBorda, player, 3)
+    comida = engine.draw.rect(tela, branco, posComida)
+    engine.draw.rect(tela, vermelho, comida, 3)
     tela.blit(score, posScore)
     tela.blit(restart, posRestart)
     tela.blit(sair, posSair)
@@ -173,7 +174,8 @@ def gameover(score):
 
 def resetJogar():
     global reset
-    reset = True
+    resetAll()
+    reset = False
     fim = False
     return True
 
@@ -335,7 +337,8 @@ def telaScores():
 
             tela.blit(renderScores[i][0], (resolucao[0] / 2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]))
             tela.blit(renderScores[i][1], (resolucao[0] / 2 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]))
-            engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - 10, rectLinha[0], rectLinha[1]))
+            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - 10, rectLinha[0], rectLinha[1]))
+            engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
 
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
@@ -440,6 +443,7 @@ def render():
 
     if fim != True:
         while(True):
+            
             ## pintar a tela de preto
             blitBg()
 
@@ -479,7 +483,7 @@ def render():
             player = engine.draw.rect(tela, corBorda, player, 3)
 
             ## desenhar comida
-            comida = engine.draw.rect(tela, vermelho, posComida)
+            comida = engine.draw.rect(tela, branco, posComida)
             engine.draw.rect(tela, vermelho, comida, 3)
 
             ## dando update no score
