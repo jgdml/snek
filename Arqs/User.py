@@ -1,6 +1,6 @@
 import sqlite3
 from os import _exit
-from datetime import datetime
+from datetime import datetime, timedelta
 from Defaults import root
 
 def criarTabelas():
@@ -54,6 +54,7 @@ def criarTabelas():
     cursor.execute("""CREATE TABLE IF NOT EXISTS sessao(
         id INTEGER NOT NULL
     )""")
+
 
 
 def cadastro(login, senha):
@@ -216,14 +217,21 @@ def mostrarScores(tempo):
 
     topScores = []
 
-    if tempo == "s":
-        condicao = "AND highscores.data <"
-    elif tempo == "m":
+    data7 = dataD - timedelta(days=7)
+    data30 = dataD - timedelta(days=30)
+    data7 = data7.strftime("%d%m%y")
+    data30 = data30.strftime("%d%m%y")
 
-    elif tempo == "t":
+    if tempo == 0:
+        condicao = f"AND highscores.data > '{data7}'"
+
+    elif tempo == 1:
+        condicao = f"AND highscores.data > '{data30}'"
+
+    elif tempo == 2:
         condicao = ""
 
-    
+
 
     for i in range(1, cursor.fetchall()[0][0] + 1):
 
@@ -260,5 +268,6 @@ def jogoSair():
 
 conn = sqlite3.connect(root+"banco")
 cursor = conn.cursor()
-data = datetime.now().strftime("%d%m%y")
+dataD = datetime.now() 
+data = dataD.strftime("%d%m%y")
 criarTabelas()

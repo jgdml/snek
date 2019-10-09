@@ -299,18 +299,26 @@ def telaMenu():
 
         engine.display.update()
 
-    
-    
-def telaScores():
 
-    topScores = mostrarScores("s")
+
+def updateScoreScreen(tempo):
+    topScores = mostrarScores(tempo)
     renderScores = []
 
     for i in range(0, len(topScores)):
         renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco)])
+
+    return topScores, renderScores
+
+
+
+def telaScores():
+
+    topScores, renderScores = updateScoreScreen(0)
     
     rectLinha = [resolucao[0] * 0.55, resolucao[1] * 0.01]
 
+    apply = 0
     selecionado = 0
 
     while(True):
@@ -319,7 +327,7 @@ def telaScores():
 
         titulo("Highscores")
 
-        selecionado = switch(500, 400, ("7 Dias", "30 Dias", "Tudo"), eventos, selecionado)
+        selecionado = switch(resolucao[0] * 0.5, posCaixa[17], ("7 Dias", "30 Dias", "Tudo"), eventos, selecionado)
 
         for i in range(0, len(renderScores)):
 
@@ -348,6 +356,11 @@ def telaScores():
 
         if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
+
+
+        if apply != selecionado:
+            apply = selecionado
+            topScores, renderScores = updateScoreScreen(apply)
 
         engine.display.update()
 
