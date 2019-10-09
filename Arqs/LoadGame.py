@@ -3,9 +3,10 @@ from random import randint
 from time import sleep
 
 from Arqs.User import *
-from Components.BoxMenu import boxMenu
+from Components.Botao import Botao
 from Components.Slider import slider
 from Components.TextInput import textInput
+from Components.Switch import switch
 from Defaults import *
 from Arqs.Funcs import *
 
@@ -210,7 +211,7 @@ def telaCadastro():
             senhaTxt += retSenha
 
     
-        ret = boxMenu("Cadastrar", evento, resolucao[0] / 2, posCaixa[17], lambda: cadastro(loginTxt, senhaTxt))
+        ret = Botao("Cadastrar", evento, resolucao[0] / 2, posCaixa[17], lambda: cadastro(loginTxt, senhaTxt))
         if ret != None:
             resultado = ret
         
@@ -223,7 +224,7 @@ def telaCadastro():
         resRenderS = resRender.get_size()
         tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
     
-        if boxMenu("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+        if Botao("<", evento, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
         engine.display.update()
@@ -260,7 +261,7 @@ def telaInicial():
             senhaTxt += retSenha
 
 
-        ret = boxMenu("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt))
+        ret = Botao("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt))
         if ret == True:
             break
         elif ret != None:
@@ -270,7 +271,7 @@ def telaInicial():
         resRenderS = resRender.get_size()
         tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
 
-        boxMenu("Cadastrar-se", evento, resolucao[0] * 0.146, resolucao[1] * 0.962, telaCadastro)
+        Botao("Cadastrar-se", evento, resolucao[0] * 0.146, resolucao[1] * 0.962, telaCadastro)
 
         engine.display.update()
         
@@ -287,14 +288,14 @@ def telaMenu():
 
         blitNome()
 
-        if boxMenu("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
+        if Botao("Jogar", evento, resolucao[0] / 2, posCaixa[11], resetJogar):
             break
 
-        boxMenu("Highscores", evento, resolucao[0] / 2, posCaixa[13], telaScores)
+        Botao("Highscores", evento, resolucao[0] / 2, posCaixa[13], telaScores)
 
-        boxMenu("Opções", evento, resolucao[0] / 2, posCaixa[15], telaOpcoes)
+        Botao("Opções", evento, resolucao[0] / 2, posCaixa[15], telaOpcoes)
 
-        boxMenu("Sair", evento, resolucao[0] / 2, posCaixa[17], jogoSair)
+        Botao("Sair", evento, resolucao[0] / 2, posCaixa[17], jogoSair)
 
         engine.display.update()
 
@@ -302,7 +303,7 @@ def telaMenu():
     
 def telaScores():
 
-    topScores = mostrarScores()
+    topScores = mostrarScores("s")
     renderScores = []
 
     for i in range(0, len(topScores)):
@@ -310,11 +311,15 @@ def telaScores():
     
     rectLinha = [resolucao[0] * 0.55, resolucao[1] * 0.01]
 
+    selecionado = 0
+
     while(True):
         blitBg()
         eventos = event()
 
         titulo("Highscores")
+
+        selecionado = switch(500, 400, ("7 Dias", "30 Dias", "Tudo"), eventos, selecionado)
 
         for i in range(0, len(renderScores)):
 
@@ -341,7 +346,7 @@ def telaScores():
             engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
 
-        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+        if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
         engine.display.update()
@@ -357,13 +362,13 @@ def telaOpcoes():
 
         titulo("Opções")
 
-        boxMenu("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
+        Botao("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
-        if boxMenu("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
+        if Botao("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
             log = False
             break
         
-        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+        if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
         engine.display.update()
@@ -405,7 +410,7 @@ def telaSkin():
 
         drawSkin(rect, pos, cores)
 
-        boxMenu("Aplicar", eventos, resolucao[0] / 2, posCaixa[16], lambda: mudarSkin(cores[0], cores[1]))
+        Botao("Aplicar", eventos, resolucao[0] / 2, posCaixa[16], lambda: mudarSkin(cores[0], cores[1]))
 
         if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break

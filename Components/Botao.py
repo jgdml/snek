@@ -1,9 +1,9 @@
 from Defaults import *
 
-def boxMenu(texto, evento, posX, posY, func):
+def Botao(texto, evento, posX, posY, func):
 
     txtSize = fonte.size(texto)
-    txt = engine.font.Font.render(fonte, texto, True, (0, 0, 0))
+    txt = engine.font.Font.render(fonte, texto, True, bg)
 
     rectTam = txtSize[0] + resolucao[0] * 0.1, txtSize[1] + resolucao[1] * 0.027
 
@@ -16,8 +16,8 @@ def boxMenu(texto, evento, posX, posY, func):
     if caixa.collidepoint(engine.mouse.get_pos()):
         caixa[0] -= (caixa[2] * 0.2) / 2
         caixa[2] *= 1.2
-        caixa = engine.draw.rect(tela, (150, 150, 150), caixa)
-        engine.draw.rect(tela, (150, 150, 150), caixa, 4)
+        caixa = engine.draw.rect(tela, highlight, caixa)
+        engine.draw.rect(tela, highlight, caixa, 4)
         txt = engine.font.Font.render(fonte, texto, True, bg)
 
         if evento != None and evento.type == engine.MOUSEBUTTONDOWN:

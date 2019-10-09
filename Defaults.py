@@ -53,6 +53,7 @@ verde2 = 92, 255, 158
 verde3 = 149, 255, 192
 verde4 = 205, 255, 226
 azul = 127, 178, 255
+highlight = 150, 150, 150
 
 ## a variavel q vai definir pra onde a cobra vai se mexer
 direcao = "nulo"

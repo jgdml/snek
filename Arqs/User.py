@@ -200,7 +200,6 @@ def delSessao():
 
 
 def uploadScore(score):
-    data = datetime.now().strftime("%d%m%y")
 
     cursor.execute(f"""
     INSERT INTO highscores
@@ -209,19 +208,31 @@ def uploadScore(score):
     conn.commit()
 
 
-def mostrarScores():
+def mostrarScores(tempo):
+    
     cursor.execute(f"""
     SELECT MAX(idUser) FROM usuario
     """)
 
     topScores = []
 
+    if tempo == "s":
+        condicao = "AND highscores.data <"
+    elif tempo == "m":
+
+    elif tempo == "t":
+        condicao = ""
+
+    
+
     for i in range(1, cursor.fetchall()[0][0] + 1):
+
         cursor.execute(f"""
         SELECT usuario.login, MAX(highscores.score), highscores.idUser FROM highscores
         INNER JOIN usuario
         ON usuario.idUser = highscores.idUser
-        WHERE highscores.idUser = {i}""")
+        WHERE highscores.idUser = {i} {condicao}""")
+
         score = cursor.fetchall()[0]
         if score[0] and score[1]:
             
@@ -249,4 +260,5 @@ def jogoSair():
 
 conn = sqlite3.connect(root+"banco")
 cursor = conn.cursor()
+data = datetime.now().strftime("%d%m%y")
 criarTabelas()

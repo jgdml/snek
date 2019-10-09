@@ -32,6 +32,8 @@ def slider(posX, posY, cor, val):
             val = int((rectPointer[0] - rect[0]) / pointerDiv)
             if val < 0:
                 val = 0
+            elif val > 255:
+                val = 255
 
     engine.draw.rect(tela, branco, rectPointer)
     displayVal = engine.font.Font.render(fonte, str(val), True, branco)
