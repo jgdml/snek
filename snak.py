@@ -30,4 +30,7 @@ while(True):
             ## q o cara aperto
             if keyPress(eventos.key) == "esc":
                 telaMenu()
+        
+        if eventos.type == engine.QUIT:
+            jogoSair()
             

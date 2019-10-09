@@ -25,13 +25,20 @@ def switch(posX, posY, opcoes, eventos, selecionado):
     container = engine.draw.rect(tela, branco, rect)
     engine.draw.rect(tela, branco, container, 3)
 
+    mPos = engine.mouse.get_pos()
+
+
+    if container.collidepoint(mPos):
+        container = engine.draw.rect(tela, highlight, rect)
+        engine.draw.rect(tela, highlight, container, 3)
+
+
     mais = tela.blit(mais, posMais)
     menos = tela.blit(menos, posMenos)
 
     tela.blit(txt, posTxt)
 
 
-    mPos = engine.mouse.get_pos()
     if mais.collidepoint(mPos):
         if click(eventos):
             if selecionado +1 < len(opcoes):

@@ -12,11 +12,24 @@ engine.display.set_caption("Snek")
 ## pega informaçao do display
 getRes = engine.display.Info()
 
-## guarda a res do display numa array
-resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
+config = open(root+"config.txt", "r")
+full = config.readline()
 
-##inicia a tela com a resolucao
-tela = engine.display.set_mode(resolucao)
+if "1" in full:
+    resolucao = [int(getRes.current_w), int(getRes.current_h)]
+    flags = engine.FULLSCREEN | engine.DOUBLEBUF
+
+    tela = engine.display.set_mode(resolucao, flags)
+    
+else:
+    resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
+    flags = engine.DOUBLEBUF
+
+    tela = engine.display.set_mode(resolucao, flags)
+
+config.close()
+
+tela.set_alpha(None)
 
 posCaixa = []
 for i in range(1, 21):
@@ -25,7 +38,7 @@ for i in range(1, 21):
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
 
-limiteFps = 200
+limiteFps = 120
 
 ## define o tamanho da cobra de acordo com o display
 ## nesse caso o tamanho eh 2% do tamanho do display

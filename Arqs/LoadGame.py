@@ -3,16 +3,22 @@ from random import randint
 from time import sleep
 
 from Arqs.User import *
+from Arqs.Funcs import *
 from Components.Botao import Botao
 from Components.Slider import slider
 from Components.TextInput import textInput
 from Components.Switch import switch
 from Defaults import *
-from Arqs.Funcs import *
 
+
+def mudarTela(v):
+    config = open(root+"config.txt", "w")
+    config.write(f"fullscreen = {v}")
+    config.close()
 
 def blitNome():
     tela.blit(ultra, (resolucao[0] / 2 - ultra.get_size()[0] / 2, ultra.get_size()[1] / 2))
+
 
 
 def titulo(txt):
@@ -20,8 +26,16 @@ def titulo(txt):
     tela.blit(titulo, (resolucao[0] / 2 - titulo.get_size()[0] / 2, titulo.get_size()[1] / 2))
 
 
+
 def blitBg():
     tela.fill(bg)
+
+
+
+def mostrarFps():
+    txt = fonte.render(str(int(relogio.get_fps())), True, branco)
+    tela.blit(txt, (resolucao[0] - txt.get_size()[0], txt.get_size()[1]))
+
 
 
 def logoutConta():
@@ -59,7 +73,7 @@ def colisaoComida(obj1, obj2):
 
     if obj1.colliderect(obj2):
         calda += 1
-        vel += resolucao[1] * 0.0001
+        vel += resolucao[1] * 0.0004
         novaComida()
 
 
@@ -369,6 +383,9 @@ def telaScores():
 def telaOpcoes():
     log = True
 
+    apply = int(full[len(full) - 1])
+    select = apply
+
     while(True):
         blitBg()
         eventos = event()
@@ -377,12 +394,18 @@ def telaOpcoes():
 
         Botao("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
-        if Botao("Logout", eventos, resolucao[0] / 2, posCaixa[15], quebra):
+        select = switch(resolucao[0] * 0.5, posCaixa[15], ("Janela", "Tela Cheia"), eventos, select)
+
+        if Botao("Logout", eventos, resolucao[0] / 2, posCaixa[17], quebra):
             log = False
             break
         
         if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
+
+        if apply != select:
+            apply = select
+            mudarTela(apply)
 
         engine.display.update()
 
@@ -425,7 +448,7 @@ def telaSkin():
 
         Botao("Aplicar", eventos, resolucao[0] / 2, posCaixa[16], lambda: mudarSkin(cores[0], cores[1]))
 
-        if boxMenu("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
+        if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
             break
 
 
@@ -445,7 +468,7 @@ def drawCalda(arr, player):
 
         ## checar se o player colidiu com a calda
         if player.colliderect(c) and i > 9:
-            return True
+            return False
 
 
 
@@ -464,7 +487,7 @@ def render():
             
             ## pintar a tela de preto
             blitBg()
-
+            mostrarFps()
             ## desenhar player
             player = engine.draw.rect(tela, corCobra, rectPlayer)
 
@@ -502,7 +525,7 @@ def render():
 
             ## desenhar comida
             comida = engine.draw.rect(tela, branco, posComida)
-            engine.draw.rect(tela, vermelho, comida, 3)
+            comida = engine.draw.rect(tela, vermelho, comida, 3)
 
             ## dando update no score
             score = fonte.render(str((calda - tamInicial) * 450), True, branco)
