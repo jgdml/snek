@@ -27,10 +27,6 @@ def titulo(txt):
 
 
 
-
-
-
-
 def blitBg():
     tela.fill(bg)
 
@@ -46,6 +42,7 @@ def logoutConta():
     delSessao()
     telaInicial()
     telaMenu()
+
 
 
 def autoRun():
@@ -193,9 +190,8 @@ def gameover(score):
 
 def resetJogar():
     global reset
-    resetAll()
-    reset = False
-    fim = False
+    fim = True
+    reset = True
     return True
 
 
@@ -368,7 +364,7 @@ def telaScores():
 
             tela.blit(renderScores[i][0], (resolucao[0] / 2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]))
             tela.blit(renderScores[i][1], (resolucao[0] / 2 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]))
-            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - resolucao[1] * 0.009, rectLinha[0], rectLinha[1]))
+            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - resolucao[1] * 0.007, rectLinha[0], rectLinha[1]))
             engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
 
@@ -474,7 +470,7 @@ def drawCalda(arr, player):
 
         ## checar se o player colidiu com a calda
         if player.colliderect(c) and i > 9:
-            return False
+            return True
 
 
 
@@ -488,77 +484,77 @@ def render():
     ## tamanho da calda
     calda = tamInicial
 
-    if fim != True:
-        while(True):
-            
-            ## pintar a tela de preto
-            blitBg()
-            mostrarFps()
-            ## desenhar player
-            player = engine.draw.rect(tela, corCobra, rectPlayer)
+    while(True):
+        
+        ## pintar a tela de preto
+        blitBg()
+        mostrarFps()
+        ## desenhar player
+        player = engine.draw.rect(tela, corCobra, rectPlayer)
 
-            ## colocar a posiçao da cobra 
-            ## em um array para usar para
-            ## desenhar a calda
-            arr.append(player)
+        ## colocar a posiçao da cobra 
+        ## em um array para usar para
+        ## desenhar a calda
+        arr.append(player)
 
-            ## deletar elementos da array
-            ## para ela nao ficar muito grande
-            if len(arr) > calda:
-                arr.pop(0)
+        ## deletar elementos da array
+        ## para ela nao ficar muito grande
+        if len(arr) > calda:
+            arr.pop(0)
 
-            ## se uma dessas funçoes retornar true
-            ## significa que o player encostou na calda
-            ## ou colidiu ocm a parede
-            if drawCalda(arr, player) or colisaoParede(player):
-                fim = True
-                gameover(score)
+        ## se uma dessas funçoes retornar true
+        ## significa que o player encostou na calda
+        ## ou colidiu ocm a parede
+        if drawCalda(arr, player) or colisaoParede(player):
+            gameover(score)
+            fim = True
 
-                while(True):
-
-                    if reset:
-                        resetAll()
-                        arr = [rectPlayer] * tamInicial
-                        calda = tamInicial
-                        break
-
-
-            ## desenhar a cobra denovo
-            ## pra ficar em cima da calda
-            player = engine.draw.rect(tela, corCobra, rectPlayer)
-
-            player = engine.draw.rect(tela, corBorda, player, 3)
-
-            ## desenhar comida
-            comida = engine.draw.rect(tela, branco, posComida)
-            comida = engine.draw.rect(tela, vermelho, comida, 3)
-
-            ## dando update no score
-            score = fonte.render(str((calda - tamInicial) * 450), True, branco)
-
-            ## update na posiçao do score
-            posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
-
-            ## colocando score na tela
-            tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
+        if fim:
+            while(True):
+                if reset:
+                    print("reset")
+                    resetAll()
+                    arr = [rectPlayer] * tamInicial
+                    calda = tamInicial
+                    break
 
 
-            ## fazer a cobra andar um pouco a cada frame
-            autoRun()
+        ## desenhar a cobra denovo
+        ## pra ficar em cima da calda
+        player = engine.draw.rect(tela, corCobra, rectPlayer)
 
-            ## chama essa funcao a cada frame
-            ## pro bot analisar e decidir oq fazer
-            # bot()
+        player = engine.draw.rect(tela, corBorda, player, 3)
 
-            ## checa se o player colidiu com a comida
-            colisaoComida(player, comida)
+        ## desenhar comida
+        comida = engine.draw.rect(tela, branco, posComida)
+        comida = engine.draw.rect(tela, vermelho, comida, 3)
 
-            ## fazer um update senao fica td bugado
-            engine.display.update()
+        ## dando update no score
+        score = fonte.render(str((calda - tamInicial) * 450), True, branco)
 
-            ## esse relogio.tick substitui o sleep
-            ## o parametro dele é o máximo de fps que o jogo vai rodar
-            relogio.tick_busy_loop(limiteFps)
+        ## update na posiçao do score
+        posScore = (resolucao[0] / 2) - score.get_size()[0] / 2, 0
+
+        ## colocando score na tela
+        tela.blit(score, ((resolucao[0] / 2) - score.get_size()[0] / 2, 0))
+
+
+        ## fazer a cobra andar um pouco a cada frame
+        autoRun()
+
+        ## chama essa funcao a cada frame
+        ## pro bot analisar e decidir oq fazer
+        # bot()
+
+        ## checa se o player colidiu com a comida
+        colisaoComida(player, comida)
+
+        ## fazer um update senao fica td bugado
+        engine.display.update()
+
+        ## esse relogio.tick substitui o sleep
+        ## o parametro dele é o máximo de fps que o jogo vai rodar
+        relogio.tick_busy_loop(limiteFps)
 
 
 novaComida()

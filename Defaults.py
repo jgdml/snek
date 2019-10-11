@@ -92,9 +92,9 @@ ultra = ultra.render("Ultra Snake", True, branco)
 
 ## pra resetar o jogo se o usuario
 ## apertar R
-reset = False
+reset = True
 
 ## pra informar que o jogo acabou
-fim = False
+fim = True
 
 upload = False
