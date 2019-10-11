@@ -1,5 +1,8 @@
-from Defaults import engine, resolucao
+from Defaults import *
 from Arqs.User import jogoSair
+from threading import Thread as th
+from time import sleep
+from os import system
 
 
 def event():
@@ -48,3 +51,15 @@ def colisaoParede(rect):
     ## teleporte quando tocar a parede
     # return paredeTeleporte()
 
+
+
+def restartWindow():
+    th(target = newWindow).start()
+    sleep(0.2)
+    jogoSair()
+
+
+
+def newWindow():
+    cmd = "python "+root+"snak.py"
+    system(cmd)

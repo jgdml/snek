@@ -27,6 +27,10 @@ def titulo(txt):
 
 
 
+
+
+
+
 def blitBg():
     tela.fill(bg)
 
@@ -392,9 +396,11 @@ def telaOpcoes():
 
         titulo("Opções")
 
-        Botao("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
+        Botao("Skin", eventos, resolucao[0] / 2, posCaixa[11], telaSkin)
 
-        select = switch(resolucao[0] * 0.5, posCaixa[15], ("Janela", "Tela Cheia"), eventos, select)
+        select = switch(resolucao[0] * 0.5, posCaixa[13], ("Janela", "Tela Cheia"), eventos, select)
+
+        Botao("Reiniciar", eventos, resolucao[0] / 2, posCaixa[15], restartWindow)
 
         if Botao("Logout", eventos, resolucao[0] / 2, posCaixa[17], quebra):
             log = False
