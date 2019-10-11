@@ -72,9 +72,9 @@ highlight = 150, 150, 150
 direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
-fonte = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0265))
+fonte = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0225))
 fonteTitulo = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0565))
-ultra = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.1))
+ultra = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.07))
 
 ## fazer um texto predefinido para renderizar depois
 restart = fonte.render("R = Reset", True, branco)

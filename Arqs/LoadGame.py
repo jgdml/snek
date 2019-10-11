@@ -364,7 +364,7 @@ def telaScores():
 
             tela.blit(renderScores[i][0], (resolucao[0] / 2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]))
             tela.blit(renderScores[i][1], (resolucao[0] / 2 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]))
-            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - 10, rectLinha[0], rectLinha[1]))
+            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - resolucao[1] * 0.009, rectLinha[0], rectLinha[1]))
             engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
 
