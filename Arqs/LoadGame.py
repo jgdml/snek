@@ -11,10 +11,6 @@ from Components.Switch import switch
 from Defaults import *
 
 
-def mudarTela(v):
-    config = open(root+"config.txt", "w")
-    config.write(f"fullscreen = {v}")
-    config.close()
 
 def blitNome():
     tela.blit(ultra, (resolucao[0] / 2 - ultra.get_size()[0] / 2, ultra.get_size()[1] / 2))

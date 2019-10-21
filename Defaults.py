@@ -12,18 +12,18 @@ engine.display.set_caption("Snek")
 ## pega informaçao do display
 getRes = engine.display.Info()
 
-config = open(root+"config.txt", "r")
+config = open(root+"config.ini", "r")
 full = config.readline()
+
+flags = engine.FULLSCREEN | engine.DOUBLEBUF | engine.HWSURFACE
 
 if "1" in full:
     resolucao = [int(getRes.current_w), int(getRes.current_h)]
-    flags = engine.FULLSCREEN | engine.DOUBLEBUF
-
     tela = engine.display.set_mode(resolucao, flags)
     
 else:
     resolucao = [int(getRes.current_w / 1.5), int(getRes.current_h / 1.5)]
-    flags = engine.DOUBLEBUF
+    flags = engine.DOUBLEBUF | engine.HWSURFACE
 
     tela = engine.display.set_mode(resolucao, flags)
 

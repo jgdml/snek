@@ -15,6 +15,13 @@ def event():
 
 
 
+def mudarTela(v):
+    config = open(root+"config.ini", "w")
+    config.write(f"fullscreen = {v}")
+    config.close()
+
+
+
 def resetJogar():
     global reset
     reset = True
