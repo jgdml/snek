@@ -10,16 +10,16 @@ def switch(posX, posY, opcoes, eventos, selecionado):
     txt = fonte.render(str(opcoes[selecionado]), True, bg)
     posTxt = posX - txt.get_size()[0] / 2, posY - txt.get_size()[1] / 2
 
-    mais = fonte.render(">", True, bg)
-    menos = fonte.render("<", True, bg)
+    mais = fonteArr.render(">>", True, bg)
+    menos = fonteArr.render("<<", True, bg)
 
     centros = [
         [mais.get_size()[0] / 2, mais.get_size()[1] / 2],
         [menos.get_size()[0] / 2, menos.get_size()[1] / 2]
     ]
 
-    posMais = (posX + rect[3] * 2) - centros[0][0], posY - centros[0][1]
-    posMenos = (posX - rect[3] * 2) - centros[1][0], posY - centros[1][1]
+    posMais = (posX + rect[3] * 1.7) - centros[0][0], posY - centros[0][1]
+    posMenos = (posX - rect[3] * 1.7) - centros[1][0], posY - centros[1][1]
 
 
     container = engine.draw.rect(tela, branco, rect)
@@ -29,8 +29,10 @@ def switch(posX, posY, opcoes, eventos, selecionado):
 
 
     if container.collidepoint(mPos):
-        container = engine.draw.rect(tela, highlight, rect)
-        engine.draw.rect(tela, highlight, container, 3)
+        rect[0] -= (rect[2] * 0.2) / 2
+        rect[2] *= 1.2
+        container = engine.draw.rect(tela, branco, rect)
+        engine.draw.rect(tela, branco, container, 3)
 
 
     mais = tela.blit(mais, posMais)

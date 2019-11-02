@@ -1,4 +1,5 @@
 from Defaults import *
+from time import sleep
 
 def Botao(texto, evento, posX, posY, func):
 
@@ -16,11 +17,12 @@ def Botao(texto, evento, posX, posY, func):
     if caixa.collidepoint(engine.mouse.get_pos()):
         caixa[0] -= (caixa[2] * 0.2) / 2
         caixa[2] *= 1.2
-        caixa = engine.draw.rect(tela, highlight, caixa)
-        engine.draw.rect(tela, highlight, caixa, 4)
+        caixa = engine.draw.rect(tela, branco, caixa)
+        engine.draw.rect(tela, branco, caixa, 4)
         txt = engine.font.Font.render(fonte, texto, True, bg)
 
         if evento != None and evento.type == engine.MOUSEBUTTONDOWN:
+            sleep(0.1)
             return func()
 
     

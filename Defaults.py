@@ -73,6 +73,7 @@ direcao = "nulo"
 
 ## tipo de fonte e tamanho dela
 fonte = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0225))
+fonteArr = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.026))
 fonteTitulo = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.0565))
 ultra = engine.font.Font(root+"Font\\Font2.otf", int(resolucao[0] * 0.07))
 
