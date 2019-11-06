@@ -35,6 +35,11 @@ posCaixa = []
 for i in range(1, 21):
     posCaixa.append((resolucao[1] / 20) * i)
 
+
+caixaScores = []
+for i in range(1, 19):
+    caixaScores.append((resolucao[1] / 18) * i)
+
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
 

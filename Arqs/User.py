@@ -1,7 +1,8 @@
 import sqlite3
 from os import _exit
-from datetime import datetime, timedelta
+from datetime import datetime
 from Defaults import root
+
 
 def criarTabelas():
 
@@ -206,7 +207,7 @@ def uploadScore(score):
 
     cursor.execute(f"""
     INSERT INTO highscores
-    VALUES (null, "{score}", "{data}", "{iduser}")
+    VALUES (null, "{score}", DATE("now"), "{iduser}")
     """)
     conn.commit()
 
@@ -219,16 +220,11 @@ def mostrarScores(tempo):
 
     topScores = []
 
-    data7 = dataD - timedelta(days=7)
-    data30 = dataD - timedelta(days=30)
-    data7 = data7.strftime("%d/%m/%y")
-    data30 = data30.strftime("%d/%m/%y")
-
     if tempo == 0:
-        condicao = f"AND highscores.data > '{data7}'"
+        condicao = f"AND highscores.data BETWEEN DATE('now', '-7 days') AND DATE('now')"
 
     elif tempo == 1:
-        condicao = f"AND highscores.data > '{data30}'"
+        condicao = f"AND highscores.data BETWEEN DATE('now', '-30 days') AND DATE('now')"
 
     elif tempo == 2:
         condicao = ""
@@ -244,10 +240,17 @@ def mostrarScores(tempo):
         WHERE highscores.idUser = {i} {condicao}""")
 
         score = cursor.fetchall()[0]
-        if score[0] and score[1] and score[3]:
+        
+        data = score[3].split("-")
+        troca = data[0]
+        data[0] = data[2]
+        data[2] = troca
+        data = "/".join(data)
+
+        if score[0] and score[1] and data:
             
             if score[2] != iduser:
-                score = score[0], score[1], score[3]
+                score = score[0], score[1], None, data
 
             topScores.append(score)
     
@@ -270,6 +273,4 @@ def jogoSair():
 
 conn = sqlite3.connect(root+"banco")
 cursor = conn.cursor()
-dataD = datetime.now() 
-data = dataD.strftime("%d/%m/%y")
 criarTabelas()

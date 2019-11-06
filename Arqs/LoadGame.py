@@ -354,15 +354,15 @@ def telaScores():
             else:
                 corLinha = verde4
 
-            if len(topScores[i]) > 2:
+            if topScores[i][2] != None:
                 corLinha = azul
             
             size = [renderScores[i][0].get_size()[0], renderScores[i][1].get_size()[0]]
 
-            tela.blit(renderScores[i][0], (resolucao[0] / 2.2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1] *0.01))
-            tela.blit(renderScores[i][1], (resolucao[0] / 2.5 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1]*0.01))
-            tela.blit(renderScores[i][2], (resolucao[0] / 1.8 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1]*0.01))
-            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - resolucao[1] * 0.007, rectLinha[0], rectLinha[1]))
+            tela.blit(renderScores[i][0], (resolucao[0] / 2.2 - size[0] / 2 - resolucao[0] * 0.10, caixaScores[i+3]))
+            tela.blit(renderScores[i][1], (resolucao[0] / 2.5 - size[1] / 2 + resolucao[0] * 0.10, caixaScores[i+3]))
+            tela.blit(renderScores[i][2], (resolucao[0] / 1.8 - size[1] / 2 + resolucao[0] * 0.10, caixaScores[i+3]))
+            linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, caixaScores[i+4] - resolucao[1] * 0.007, rectLinha[0], rectLinha[1]))
             engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
 
