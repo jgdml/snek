@@ -314,7 +314,6 @@ def telaMenu():
 def updateScoreScreen(tempo):
     topScores = mostrarScores(tempo)
     renderScores = []
-    print(topScores)
 
     for i in range(0, len(topScores)):
         renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco), engine.font.Font.render(fonte, str(topScores[i][3]), True, branco)])
@@ -354,7 +353,7 @@ def telaScores():
             else:
                 corLinha = verde4
 
-            if topScores[i][2] != None:
+            if topScores[i][2]:
                 corLinha = azul
             
             size = [renderScores[i][0].get_size()[0], renderScores[i][1].get_size()[0]]
@@ -514,7 +513,7 @@ def render():
         if fim:
             while(True):
                 if reset:
-                    print("reset")
+                    print("Reset")
                     resetAll()
                     arr = [rectPlayer] * tamInicial
                     calda = tamInicial

@@ -241,16 +241,18 @@ def mostrarScores(tempo):
 
         score = cursor.fetchall()[0]
         
-        data = score[3].split("-")
-        troca = data[0]
-        data[0] = data[2]
-        data[2] = troca
-        data = "/".join(data)
 
-        if score[0] and score[1] and data:
+        if score[0] and score[1] and score[3]:
+            data = score[3].split("-")
+            troca = data[0]
+            data[0] = data[2]
+            data[2] = troca 
+            data = "/".join(data)
             
             if score[2] != iduser:
-                score = score[0], score[1], None, data
+                score = [score[0], score[1], False, data]
+            else:
+                score = [score[0], score[1], iduser, data]
 
             topScores.append(score)
     
@@ -263,6 +265,7 @@ def mostrarScores(tempo):
                 topScores[i] = topScores[i+1]
                 topScores[i+1] = troca
 
+    
     return topScores
     
     
