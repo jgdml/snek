@@ -225,10 +225,10 @@ def mostrarScores(tempo):
     data30 = data30.strftime("%d/%m/%y")
 
     if tempo == 0:
-        condicao = f"AND highscores.data > {data7}"
+        condicao = f"AND highscores.data > '{data7}'"
 
     elif tempo == 1:
-        condicao = f"AND highscores.data > {data30}"
+        condicao = f"AND highscores.data > '{data30}'"
 
     elif tempo == 2:
         condicao = ""
@@ -244,10 +244,10 @@ def mostrarScores(tempo):
         WHERE highscores.idUser = {i} {condicao}""")
 
         score = cursor.fetchall()[0]
-        if score[0] and score[1]:
+        if score[0] and score[1] and score[3]:
             
             if score[2] != iduser:
-                score = score[0], score[1], score[4]
+                score = score[0], score[1], score[3]
 
             topScores.append(score)
     

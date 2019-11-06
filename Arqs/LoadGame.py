@@ -281,7 +281,7 @@ def telaInicial():
         resRenderS = resRender.get_size()
         tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
 
-        Botao("Cadastrar-se", evento, resolucao[0] * 0.146, resolucao[1] * 0.962, telaCadastro)
+        Botao("Cadastrar-se", evento, resolucao[0] * 0.13, resolucao[1] * 0.962, telaCadastro)
 
         engine.display.update()
         

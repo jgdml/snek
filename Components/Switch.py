@@ -4,7 +4,8 @@ from Defaults import *
 
 def Switch(posX, posY, opcoes, eventos, selecionado):
 
-    tam = [resolucao[0] * 0.20, resolucao[1] * 0.08]
+
+    tam = [resolucao[0] * 0.20, resolucao[1] * 0.027 + fonte.size(opcoes[0])[1]]
     rect = [posX - tam[0] / 2, posY - tam[1] / 2, tam[0], tam[1]]
 
     txt = fonte.render(str(opcoes[selecionado]), True, bg)
