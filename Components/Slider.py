@@ -1,6 +1,6 @@
 from Defaults import *
 
-def slider(posX, posY, cor, val):
+def Slider(posX, posY, cor, val):
     if cor == "r":
         cor = 255, 50, 50
 

@@ -155,6 +155,8 @@ def mudarSkin(base, borda):
     WHERE idSkin = {iduser}
     """)
     conn.commit()
+
+    return True
     
 
 def getCor(tabela):
@@ -204,7 +206,7 @@ def uploadScore(score):
 
     cursor.execute(f"""
     INSERT INTO highscores
-    VALUES (null, "{score}", {data}, "{iduser}")
+    VALUES (null, "{score}", "{data}", "{iduser}")
     """)
     conn.commit()
 
@@ -219,14 +221,14 @@ def mostrarScores(tempo):
 
     data7 = dataD - timedelta(days=7)
     data30 = dataD - timedelta(days=30)
-    data7 = data7.strftime("%d%m%y")
-    data30 = data30.strftime("%d%m%y")
+    data7 = data7.strftime("%d/%m/%y")
+    data30 = data30.strftime("%d/%m/%y")
 
     if tempo == 0:
-        condicao = f"AND highscores.data > '{data7}'"
+        condicao = f"AND highscores.data > {data7}"
 
     elif tempo == 1:
-        condicao = f"AND highscores.data > '{data30}'"
+        condicao = f"AND highscores.data > {data30}"
 
     elif tempo == 2:
         condicao = ""
@@ -236,7 +238,7 @@ def mostrarScores(tempo):
     for i in range(1, cursor.fetchall()[0][0] + 1):
 
         cursor.execute(f"""
-        SELECT usuario.login, MAX(highscores.score), highscores.idUser FROM highscores
+        SELECT usuario.login, MAX(highscores.score), highscores.idUser, highscores.data FROM highscores
         INNER JOIN usuario
         ON usuario.idUser = highscores.idUser
         WHERE highscores.idUser = {i} {condicao}""")
@@ -245,7 +247,7 @@ def mostrarScores(tempo):
         if score[0] and score[1]:
             
             if score[2] != iduser:
-                score = score[0], score[1]
+                score = score[0], score[1], score[4]
 
             topScores.append(score)
     
@@ -269,5 +271,5 @@ def jogoSair():
 conn = sqlite3.connect(root+"banco")
 cursor = conn.cursor()
 dataD = datetime.now() 
-data = dataD.strftime("%d%m%y")
+data = dataD.strftime("%d/%m/%y")
 criarTabelas()

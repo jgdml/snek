@@ -5,9 +5,9 @@ from time import sleep
 from Arqs.User import *
 from Arqs.Funcs import *
 from Components.Botao import Botao
-from Components.Slider import slider
+from Components.Slider import Slider
 from Components.TextInput import textInput
-from Components.Switch import switch
+from Components.Switch import Switch
 from Defaults import *
 
 
@@ -314,9 +314,10 @@ def telaMenu():
 def updateScoreScreen(tempo):
     topScores = mostrarScores(tempo)
     renderScores = []
+    print(topScores)
 
     for i in range(0, len(topScores)):
-        renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco)])
+        renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco), engine.font.Font.render(fonte, str(topScores[i][3]), True, branco)])
 
     return topScores, renderScores
 
@@ -337,7 +338,7 @@ def telaScores():
 
         titulo("Highscores")
 
-        selecionado = switch(resolucao[0] * 0.5, posCaixa[17], ("7 Dias", "30 Dias", "Tudo"), eventos, selecionado)
+        selecionado = Switch(resolucao[0] * 0.5, posCaixa[17], ("7 Dias", "30 Dias", "Tudo"), eventos, selecionado)
 
         for i in range(0, len(renderScores)):
 
@@ -358,8 +359,9 @@ def telaScores():
             
             size = [renderScores[i][0].get_size()[0], renderScores[i][1].get_size()[0]]
 
-            tela.blit(renderScores[i][0], (resolucao[0] / 2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]))
-            tela.blit(renderScores[i][1], (resolucao[0] / 2 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]))
+            tela.blit(renderScores[i][0], (resolucao[0] / 2.2 - size[0] / 2 - resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1] *0.01))
+            tela.blit(renderScores[i][1], (resolucao[0] / 2.5 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1]*0.01))
+            tela.blit(renderScores[i][2], (resolucao[0] / 1.8 - size[1] / 2 + resolucao[0] * 0.10, posCaixa[i+3]-resolucao[1]*0.01))
             linhaDraw = engine.draw.rect(tela, corLinha, (resolucao[0] / 2 - rectLinha[0] / 2, posCaixa[i+4] - resolucao[1] * 0.007, rectLinha[0], rectLinha[1]))
             engine.draw.rect(tela, corLinha, linhaDraw, 3)
             
@@ -390,7 +392,7 @@ def telaOpcoes():
 
         Botao("Skin", eventos, resolucao[0] / 2, posCaixa[11], telaSkin)
 
-        select = switch(resolucao[0] * 0.5, posCaixa[13], ("Janela", "Tela Cheia"), eventos, select)
+        select = Switch(resolucao[0] * 0.5, posCaixa[13], ("Janela", "Tela Cheia"), eventos, select)
 
         Botao("Reiniciar", eventos, resolucao[0] / 2, posCaixa[15], restartWindow)
 
@@ -429,17 +431,17 @@ def telaSkin():
 
         tela.blit(borda, (resolucao[0] / 1.3 - borda.get_size()[0] / 2, posCaixa[3]))
 
-        cores[0][0] = slider(resolucao[0] / 4, posCaixa[6], "r", cores[0][0])
+        cores[0][0] = Slider(resolucao[0] / 4, posCaixa[6], "r", cores[0][0])
 
-        cores[0][1] = slider(resolucao[0] / 4, posCaixa[8], "g", cores[0][1])
+        cores[0][1] = Slider(resolucao[0] / 4, posCaixa[8], "g", cores[0][1])
 
-        cores[0][2] = slider(resolucao[0] / 4, posCaixa[10], "b", cores[0][2])
+        cores[0][2] = Slider(resolucao[0] / 4, posCaixa[10], "b", cores[0][2])
 
-        cores[1][0] = slider(resolucao[0] / 1.3, posCaixa[6], "r", cores[1][0])
+        cores[1][0] = Slider(resolucao[0] / 1.3, posCaixa[6], "r", cores[1][0])
 
-        cores[1][1] = slider(resolucao[0] / 1.3, posCaixa[8], "g", cores[1][1])
+        cores[1][1] = Slider(resolucao[0] / 1.3, posCaixa[8], "g", cores[1][1])
 
-        cores[1][2] = slider(resolucao[0] / 1.3, posCaixa[10], "b", cores[1][2])
+        cores[1][2] = Slider(resolucao[0] / 1.3, posCaixa[10], "b", cores[1][2])
 
 
         drawSkin(rect, pos, cores)
@@ -452,10 +454,14 @@ def telaSkin():
 
         engine.display.update()
 
+
+
 def drawSkin(rect, pos, cores):
     for i in range(0, 15):
         player = engine.draw.rect(tela, cores[0], (pos[0] + rect[0] * i / 6, pos[1], rect[0], rect[1]))
         engine.draw.rect(tela, cores[1], player, 3)
+
+
 
 def drawCalda(arr, player):
     for i in range(0, calda):
