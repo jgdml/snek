@@ -16,6 +16,10 @@ def event():
 
 
 def mudarTela(v):
+    if v:
+        v = 1
+    else:
+        v = 0
     config = open(root+"config.ini", "w")
     config.write(f"fullscreen = {v}")
     config.close()

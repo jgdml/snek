@@ -390,6 +390,10 @@ def telaOpcoes():
     log = True
 
     apply = int(full[len(full) - 1])
+    if apply == 0:
+        apply = False
+    else:
+        apply == True
     select = apply
 
     while(True):
@@ -400,7 +404,7 @@ def telaOpcoes():
 
         Botao("Skin", eventos, resolucao[0] / 2, posCaixa[11], telaSkin)
 
-        select = Switch(resolucao[0] * 0.5, posCaixa[13], ("Janela", "Tela Cheia"), eventos, select)
+        select = Check("Tela Cheia", eventos, resolucao[0] * 0.415, posCaixa[12]*1.03, select)
 
         Botao("Reiniciar", eventos, resolucao[0] / 2, posCaixa[15], restartWindow)
 
