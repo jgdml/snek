@@ -246,7 +246,7 @@ def telaInicial():
     loginTxt = ""
     senhaTxt = ""
     resultado = ""
-    keep=False
+    keep = False
 
     while(True):
         blitBg()
@@ -272,9 +272,11 @@ def telaInicial():
         else:
             senhaTxt += retSenha
 
-        keep = Check("Lembrar de mim", evento, resolucao[0] / 2.7, posCaixa[14], keep)
 
-        ret = Botao("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt))
+        keep = Check("Lembrar de mim", evento, resolucao[0] / 2.7, posCaixa[14], keep)
+        
+
+        ret = Botao("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt, keep))
         if ret == True:
             break
         elif ret != None:

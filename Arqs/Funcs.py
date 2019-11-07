@@ -68,5 +68,5 @@ def restartWindow():
 
 
 def newWindow():
-    cmd = "python "+root+"snak.py"
+    cmd = "python "+root+"Main.py"
     system(cmd)

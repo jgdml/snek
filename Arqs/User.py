@@ -110,7 +110,7 @@ def cadastro(login, senha):
         return "Este login ja existe, digite outro."
 
 
-def login(login, senha):
+def login(login, senha, keep):
     global iduser
 
     if login == None:
@@ -131,7 +131,8 @@ def login(login, senha):
 
         if senha == resultado[0][2]:
             iduser = resultado[0][0]
-            logSessao()
+            if keep:
+                logSessao()
             return True
 
         else:
@@ -192,7 +193,7 @@ def checkSessao():
     res = cursor.fetchall()
     
     if res != []:
-        return login(res[0][1], res[0][2])
+        return login(res[0][1], res[0][2], False)
 
     else:
         return False
