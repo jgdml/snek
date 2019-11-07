@@ -6,7 +6,7 @@ def Check(title, event, posX, posY, var):
     rect = posX, posY, resolucao[1] * 0.06, resolucao[1] * 0.06
     title = fonte.render(title, True, branco)
 
-    linePos = [[posX*1.01, posY*1.005], [posX+rect[2]*0.9, posY+rect[3]*0.96]]
+    linePos = [[posX*1.005, posY*1.005], [posX+rect[2]*0.9, posY+rect[3]*0.96]]
 
     caixa = engine.draw.rect(tela, branco, rect, 2)
     texto = tela.blit(title, (posX * 1.03 + rect[2], posY*1.01))

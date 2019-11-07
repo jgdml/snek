@@ -263,7 +263,6 @@ def telaInicial():
             loginTxt += retLogin
 
 
-
         retSenha = textInput(resolucao[0] / 2, posCaixa[13], "Senha", evento, "*" * len(senhaTxt))
 
         if retSenha == engine.K_BACKSPACE:
@@ -287,6 +286,8 @@ def telaInicial():
         tela.blit(resRender, (resolucao[0] / 2 - resRenderS[0] / 2, resolucao[1] * 0.4))
 
         Botao("Cadastrar-se", evento, resolucao[0] * 0.13, resolucao[1] * 0.962, telaCadastro)
+
+        Botao("X", evento, resolucao[0] * 0.93, resolucao[1] * 0.06, jogoSair)
 
         engine.display.update()
         
@@ -457,7 +458,7 @@ def telaSkin():
 
 
         drawSkin(rect, pos, cores)
-
+        
         Botao("Aplicar", eventos, resolucao[0] / 2, posCaixa[16], lambda: mudarSkin(cores[0], cores[1]))
 
         if Botao("<", eventos, resolucao[0] * 0.06, resolucao[1] * 0.962, quebra):
