@@ -8,6 +8,7 @@ from Components.Botao import Botao
 from Components.Slider import Slider
 from Components.TextInput import textInput
 from Components.Switch import Switch
+from Components.Check import Check
 from Defaults import *
 
 
@@ -245,6 +246,7 @@ def telaInicial():
     loginTxt = ""
     senhaTxt = ""
     resultado = ""
+    keep=False
 
     while(True):
         blitBg()
@@ -270,6 +272,7 @@ def telaInicial():
         else:
             senhaTxt += retSenha
 
+        keep = Check("Lembrar de mim", evento, resolucao[0] / 2.7, posCaixa[14], keep)
 
         ret = Botao("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt))
         if ret == True:
@@ -316,7 +319,11 @@ def updateScoreScreen(tempo):
     renderScores = []
 
     for i in range(0, len(topScores)):
-        renderScores.append([engine.font.Font.render(fonte, topScores[i][0], True, branco), engine.font.Font.render(fonte, str(topScores[i][1]), True, branco), engine.font.Font.render(fonte, str(topScores[i][3]), True, branco)])
+        renderScores.append([
+            engine.font.Font.render(fonte, topScores[i][0], True, branco), 
+            engine.font.Font.render(fonte, str(topScores[i][1]), True, branco), 
+            engine.font.Font.render(fonte, str(topScores[i][3]), True, branco)
+        ])
 
     return topScores, renderScores
 
