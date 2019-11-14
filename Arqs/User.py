@@ -1,6 +1,7 @@
 import sqlite3
 from os import _exit
 from datetime import datetime
+import hashlib
 from Defaults import root
 
 
@@ -60,6 +61,8 @@ def criarTabelas():
 
 def cadastro(login, senha):
 
+    senha = doHash(senha)
+
     checkLogin = f"""
     SELECT login, idUser FROM usuario
     WHERE login == "{login}";
@@ -112,6 +115,8 @@ def cadastro(login, senha):
 
 def login(login, senha, keep):
     global iduser
+
+    senha = doHash(senha)
 
     if login == None:
         return False
@@ -273,6 +278,21 @@ def mostrarScores(tempo):
 def jogoSair():
     conn.close()
     _exit(0)
+
+
+def doHash(string):
+    h1 = hashlib.sha256()
+    h2 = hashlib.md5()
+    h3 = hashlib.sha256()
+
+    h1.update(bytes(string, encoding="utf-8"))
+
+    h2.update(bytes(str(h1.digest())+"fazendohash", encoding="utf-8"))
+
+    h3.update(bytes("string3?"+str(h2.digest())+"string2", encoding="utf-8"))
+
+
+    return str(h3.digest())
 
 
 conn = sqlite3.connect(root+"banco")
