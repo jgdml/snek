@@ -24,8 +24,11 @@ def textInput(posX, posY, txt, evento, txtIn):
             if evento.key == engine.K_BACKSPACE:
                 return evento.key 
             else:
-                if evento.key != engine.K_RETURN and evento.key != engine.K_KP_ENTER:
-                    return evento.unicode
+                if evento.key != engine.K_RETURN:
+                    if evento.key != engine.K_TAB:
+                        if evento.key != engine.K_KP_ENTER:
+                            if evento.key != engine.K_ESCAPE:
+                                return evento.unicode
                     
 
     tela.blit(txtInShow, (posX - txtInSize[0] / 2, posY - txtInSize[1] / 2))
