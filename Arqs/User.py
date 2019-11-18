@@ -116,8 +116,6 @@ def cadastro(login, senha):
 def login(login, senha, keep):
     global iduser
 
-    senha = doHash(senha)
-
     if login == None:
         return False
 
@@ -134,7 +132,7 @@ def login(login, senha, keep):
 
     if resultado != []:
 
-        if senha == resultado[0][2]:
+        if senha == resultado[0][2] or doHash(senha) == resultado[0][2]:
             iduser = resultado[0][0]
             if keep:
                 logSessao()
@@ -190,7 +188,7 @@ def logSessao():
 
 def checkSessao():
     cursor.execute("""
-    SELECT * FROM usuario 
+    SELECT login, senha FROM usuario 
     INNER JOIN sessao
     ON sessao.id = usuario.idUser
     """)
@@ -198,7 +196,7 @@ def checkSessao():
     res = cursor.fetchall()
     
     if res != []:
-        return login(res[0][1], res[0][2], False)
+        return login(res[0][0], res[0][1], False)
 
     else:
         return False
