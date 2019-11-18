@@ -21,7 +21,12 @@ def textInput(posX, posY, txt, evento, txtIn):
         caixa = engine.draw.rect(tela, branco, caixa)
         
         if evento != None and evento.type == engine.KEYDOWN:
-            return evento.key if evento.key == engine.K_BACKSPACE else evento.unicode
+            if evento.key == engine.K_BACKSPACE:
+                return evento.key 
+            else:
+                if evento.key != engine.K_RETURN and evento.key != engine.K_KP_ENTER:
+                    return evento.unicode
+                    
 
     tela.blit(txtInShow, (posX - txtInSize[0] / 2, posY - txtInSize[1] / 2))
     

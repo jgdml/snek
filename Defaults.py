@@ -43,6 +43,10 @@ for i in range(1, 19):
 ## definindo relogio como uma variável para ficar mais fácil
 relogio = engine.time.Clock()
 
+## o delay para repetir as teclas quando o usuario segurar elas
+engine.key.set_repeat(200, 50)
+
+
 limiteFps = 120
 
 ## define o tamanho da cobra de acordo com o display
