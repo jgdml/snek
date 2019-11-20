@@ -272,7 +272,7 @@ def telaInicial():
             senhaTxt += retSenha
 
 
-        keep = Check("Lembrar de mim", evento, resolucao[0] / 2.7, posCaixa[14], keep)
+        keep = Check("Lembrar de mim", evento, resolucao[0] / 2, posCaixa[15], keep)
         
 
         ret = Botao("Logar", evento, resolucao[0] / 2, posCaixa[17], lambda: login(loginTxt, senhaTxt, keep))
@@ -403,9 +403,9 @@ def telaOpcoes():
 
         titulo("Opções")
 
-        Botao("Skin", eventos, resolucao[0] / 2, posCaixa[11], telaSkin)
+        select = Check("Tela Cheia", eventos, resolucao[0] / 2, posCaixa[11], select)
 
-        select = Check("Tela Cheia", eventos, resolucao[0] * 0.415, posCaixa[12]*1.03, select)
+        Botao("Skin", eventos, resolucao[0] / 2, posCaixa[13], telaSkin)
 
         Botao("Reiniciar", eventos, resolucao[0] / 2, posCaixa[15], restartWindow)
 
