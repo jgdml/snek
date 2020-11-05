@@ -1,1 +1,1 @@
-jogo snake meio meh feito em pygame
+segundo jogo que eu fiz em pygame
